@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UserService.App.Services;
+using UserService.App.Services.Mappers;
 using UserService.Infra.Data;
 using UserService.Infra.Repositories;
 
@@ -20,7 +21,9 @@ public class Startup
         // Repositories
 		services.AddScoped<IUserRepository, UserRepository>();
 
-        // Services
+		// Services
+		services.AddAutoMapper(typeof(UserProfile));
+
         services.AddScoped<IUserAppService, UserAppService>();
 
         // Add controllers

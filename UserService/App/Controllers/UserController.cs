@@ -48,5 +48,35 @@ namespace UserService.API.Controllers
             var users = await _userAppService.GetAllUsersAsync();
             return Ok(users);
         }
-    }
+
+		// PUT api/user/{id}
+		[HttpPut("{id:guid}")]
+		public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UpdateUserDto dto)
+		{
+			try
+			{
+				await _userAppService.UpdateUserAsync(id, dto);
+				return NoContent();  
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(new { message = ex.Message });
+			}
+		}
+
+		// DELETE api/user/{id}
+		[HttpDelete("{id:guid}")]
+		public async Task<IActionResult> DeleteUser(Guid id)
+		{
+			try
+			{
+				await _userAppService.DeleteUserAsync(id);
+				return NoContent(); 
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(new { message = ex.Message });
+			}
+		}
+	}
 }

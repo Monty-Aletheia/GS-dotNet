@@ -8,7 +8,7 @@ namespace UserService.App.Services
         Task<UserDto?> GetUserByIdAsync(Guid id);
         Task<IEnumerable<UserDto>> GetAllUsersAsync();
         Task<bool> UserExistsByEmailAsync(string email);
-        //Task UpdateUserAsync(UpdateUserDto dto);
-        //Task DeleteUserAsync(Guid id);
+        Task UpdateUserAsync(Guid id, UpdateUserDto dto);
+        Task DeleteUserAsync(Guid id);
     }
 }

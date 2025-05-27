@@ -1,4 +1,5 @@
-﻿using UserService.App.Dtos;
+﻿using AutoMapper;
+using UserService.App.Dtos;
 using UserService.Domain.Models;
 using UserService.Infra.Repositories;
 
@@ -7,33 +8,24 @@ namespace UserService.App.Services
     public class UserAppService : IUserAppService
     {
         private readonly IUserRepository _userRepository;
+		private readonly IMapper _mapper;
 
-        public UserAppService(IUserRepository userRepository)
+        public UserAppService(IUserRepository userRepository, IMapper mapper)
         {
             _userRepository = userRepository;
+			_mapper = mapper;
         }
 
         public async Task<UserDto> CreateUserAsync(CreateUserDto input)
         {
-            if (await _userRepository.ExistsByEmailAsync(input.Email))
+            if (await UserExistsByEmailAsync(input.Email))
                 throw new Exception("Email already register.");
 
-            var user = new User
-            {
-                Id = Guid.NewGuid(),
-                Name = input.Name,
-                Email = input.Email,
-                Password = input.Password 
-            };
+            var user = _mapper.Map<User>(input);
 
             await _userRepository.AddAsync(user);
 
-            return new UserDto
-            {
-                Id = user.Id,
-                Name = user.Name,
-                Email = user.Email
-            };
+			return _mapper.Map<UserDto>(user);
         }
 
         public async Task<UserDto> GetUserByIdAsync(Guid id)
@@ -41,35 +33,40 @@ namespace UserService.App.Services
             var user = await _userRepository.GetByIdAsync(id);
             if (user == null) return null;
 
-            return new UserDto
-            {
-                Id = user.Id,
-                Name = user.Name,
-                Email = user.Email
-            };
-        }
+            return _mapper.Map<UserDto>(user);
+		}
 
         public async Task<IEnumerable<UserDto>> GetAllUsersAsync()
         {
             var users = await _userRepository.GetAllAsync();
-            var result = new List<UserDto>();
 
-            foreach (var user in users)
-            {
-                result.Add(new UserDto
-                {
-                    Id = user.Id,
-                    Name = user.Name,
-                    Email = user.Email
-                });
-            }
-
-            return result;
+			return _mapper.Map<IEnumerable<UserDto>>(users);
         }
 
-		public Task<bool> UserExistsByEmailAsync(string email)
+		public async Task<bool> UserExistsByEmailAsync(string email)
 		{
-			throw new NotImplementedException();
+			return await _userRepository.ExistsByEmailAsync(email);
+		}
+
+		public async Task UpdateUserAsync(Guid id, UpdateUserDto dto)
+		{
+			var user = await _userRepository.GetByIdAsync(id);
+			if (user == null)
+				throw new Exception("User not found.");
+
+			_mapper.Map(dto, user);
+
+			await _userRepository.UpdateAsync(user);
+		}
+
+
+		public async Task DeleteUserAsync(Guid id)
+		{
+			var user = await _userRepository.GetByIdAsync(id);
+			if (user == null)
+				throw new Exception("User not found.");
+
+			await _userRepository.DeleteAsync(user);
 		}
 	}
 }
