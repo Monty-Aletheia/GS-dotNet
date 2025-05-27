@@ -1,0 +1,24 @@
+services:
+  api-gateway:
+    build:
+        context: .
+        dockerfile: ./ApiGateWay/Dockerfile
+    ports:
+      - 5000:8080
+    depends_on:
+     - user-service 
+    networks:
+      - app_net
+
+  user-service:
+    build:
+        context: .
+        dockerfile: ./UserService/Dockerfile
+    ports:
+     - 8080:8080
+    networks:
+      - app_net
+  
+networks:
+  app_net:
+    driver: bridge
