@@ -1,6 +1,12 @@
 {
   "GlobalConfiguration": {
-    "BaseUrl": "http://localhost:5000"
+    "BaseUrl": "http://localhost:5000",
+    "RateLimitOptions": {
+      "EnableRateLimiting": true,
+      "Period": "1m",
+      "PeriodTimespan": 1,
+      "Limit": 100
+    }
   },
   "Routes": [
     {
@@ -8,7 +14,7 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "user-service",
+          "Host": "localhost",
           "Port": 8080
         }
       ],
@@ -20,7 +26,7 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "user-service",
+          "Host": "localhost",
           "Port": 8080
         }
       ],
