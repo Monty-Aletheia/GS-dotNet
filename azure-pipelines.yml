@@ -1,0 +1,49 @@
+trigger:
+  branches:
+    include:
+      - main
+
+variables:
+  acrName: WatchTowerACR
+  tag: $(Build.BuildId)
+
+stages:
+  - stage: BuildAndPushImages
+    displayName: Build and Push Docker Images
+    jobs:
+      - job: DockerBuildPush
+        displayName: Build and Push Services
+        strategy:
+          matrix:
+            auth-service:
+              repository: user-service
+              dockerfilePath: ./UserService/Dockerfile
+              buildContext: .
+            api-gateway:
+              repository: user-service
+              dockerfilePath: ./ApiGateway/Dockerfile
+              buildContext: .
+
+        pool:
+          vmImage: 'ubuntu-latest'
+
+        steps:
+          - checkout: self
+
+          - task: Docker@2
+            displayName: Login to ACR
+            inputs:
+              command: login
+              containerRegistry: $(acrName)
+
+
+          - task: Docker@2
+            displayName: Build & Push $(repository)
+            inputs:
+              command: buildAndPush
+              repository: $(acrName)/$(repository)
+              dockerfile: $(dockerfilePath)
+              buildContext: $(buildContext)
+              tags: |
+                $(tag)
+                latest
