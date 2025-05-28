@@ -20,6 +20,8 @@ services:
         dockerfile: ./ApiGateWay/Dockerfile
     ports:
       - 5000:8080
+    env_file:
+      - .env
     depends_on:
      - user-service 
     networks:
