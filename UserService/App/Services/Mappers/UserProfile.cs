@@ -10,6 +10,7 @@ namespace UserService.App.Services.Mappers
 			CreateMap<CreateUserDto, User>().ReverseMap();
 			CreateMap<UpdateUserDto, User>()
 				.ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+			CreateMap<User, UserDto>();
 		}
 	}
 }

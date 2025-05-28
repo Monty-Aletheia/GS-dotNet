@@ -1,7 +1,9 @@
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 
-var builder = WebApplication.CreateBuilder(args); 
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Configuration.AddJsonFile("./Config/Ocelot.json", optional: false, reloadOnChange: true);
 
 builder.Services.AddOcelot();
 
@@ -15,11 +17,10 @@ builder.Services.AddCors(options =>
 	});
 });
 
-builder.Configuration.AddJsonFile("./Config/Ocelot.json", optional: false, reloadOnChange: true);
-
 var app = builder.Build();
 
 app.UseCors("AllowAll");
 
 await app.UseOcelot();
+
 app.Run();

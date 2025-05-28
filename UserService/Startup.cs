@@ -29,11 +29,10 @@ public class Startup
         // Add controllers
         services.AddControllers();
 
-		// Add Swagger (se quiser)
+		// Add Swagger 
 		services.AddEndpointsApiExplorer();
 		services.AddSwaggerGen();
 
-		// Add outras dependências aqui...
 	}
 
 	public void Configure(IApplicationBuilder app, IHostEnvironment env)
