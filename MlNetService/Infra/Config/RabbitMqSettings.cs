@@ -1,4 +1,4 @@
-﻿namespace MlNetService.Config
+﻿namespace MlNetService.Infra.Config
 {
 	public class RabbitMqSettings
 	{

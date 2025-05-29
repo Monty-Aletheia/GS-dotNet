@@ -20,8 +20,12 @@ stages:
               dockerfilePath: ./UserService/Dockerfile
               buildContext: .
             api-gateway:
-              repository: user-service
+              repository: api-gateway
               dockerfilePath: ./ApiGateway/Dockerfile
+              buildContext: .
+            mlnet-service:
+              repository: mlnet-service
+              dockerfilePath: ./MlNetService/Dockerfile
               buildContext: .
 
         pool:
