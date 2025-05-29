@@ -21,5 +21,7 @@ namespace UserService.Domain.Models
 		[Required]
 		[Column("password")]
 		public string Password { get; set; }
+
+		public Address Address { get; set; }
 	}
 }

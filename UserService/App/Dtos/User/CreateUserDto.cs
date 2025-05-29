@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace UserService.App.Dtos
+namespace UserService.App.Dtos.User
 {
 	public class CreateUserDto
 	{

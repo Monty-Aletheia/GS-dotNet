@@ -1,10 +1,11 @@
-﻿using UserService.App.Dtos;
+﻿using UserService.App.Dtos.User;
 
-namespace UserService.App.Services
+namespace UserService.Domain.Interfaces.Repositories
 {
 	public interface IUserAppService
 	{
 		Task<UserDto> CreateUserAsync(CreateUserDto dto);
+		Task<UserDto> CreateUserWithAddressAsync(CreateUserWithAddressDto dto);
 		Task<UserDto?> GetUserByIdAsync(Guid id);
 		Task<IEnumerable<UserDto>> GetAllUsersAsync();
 		Task<bool> UserExistsByEmailAsync(string email);

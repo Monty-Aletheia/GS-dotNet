@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using UserService.App.Dtos;
-using UserService.App.Services;
+using UserService.App.Dtos.User;
+using UserService.Domain.Interfaces.Repositories;
 
-namespace UserService.API.Controllers
+namespace UserService.App.Controllers
 {
 	[ApiController]
 	[Route("api/[controller]")]
@@ -19,9 +19,30 @@ namespace UserService.API.Controllers
 		[HttpPost]
 		public async Task<IActionResult> CreateUser([FromBody] CreateUserDto dto)
 		{
+			if (!ModelState.IsValid)
+				return BadRequest(ModelState);
+
 			try
 			{
 				var createdUser = await _userAppService.CreateUserAsync(dto);
+				return CreatedAtAction(nameof(GetUserById), new { id = createdUser.Id }, createdUser);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(new { message = ex.Message });
+			}
+		}
+
+		// POST api/user/withAddress
+		[HttpPost("withAddress")]
+		public async Task<IActionResult> CreateUserWithAddress([FromBody] CreateUserWithAddressDto dto)
+		{
+			if (!ModelState.IsValid)
+				return BadRequest(ModelState);
+
+			try
+			{
+				var createdUser = await _userAppService.CreateUserWithAddressAsync(dto);
 				return CreatedAtAction(nameof(GetUserById), new { id = createdUser.Id }, createdUser);
 			}
 			catch (Exception ex)
@@ -53,6 +74,9 @@ namespace UserService.API.Controllers
 		[HttpPut("{id:guid}")]
 		public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UpdateUserDto dto)
 		{
+			if (!ModelState.IsValid)
+				return BadRequest(ModelState);
+
 			try
 			{
 				await _userAppService.UpdateUserAsync(id, dto);

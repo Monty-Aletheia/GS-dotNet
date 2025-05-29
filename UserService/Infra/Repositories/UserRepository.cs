@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using UserService.Domain.Interfaces.Services;
 using UserService.Domain.Models;
 using UserService.Infra.Data;
 
@@ -17,6 +18,12 @@ namespace UserService.Infra.Repositories
 			var normalizedEmail = email.ToLower();
 			return _context.Users
 				.AnyAsync(u => u.Email.ToLower() == normalizedEmail);
+		}
+
+		public Task<bool> ExistsByIdAsync(Guid id)
+		{
+			return _context.Users
+				.AnyAsync(u => u.Id == id);
 		}
 	}
 }
