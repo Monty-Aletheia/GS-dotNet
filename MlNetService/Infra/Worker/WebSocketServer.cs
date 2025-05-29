@@ -20,7 +20,7 @@ namespace MlNetService.Infra.Worker
 		{
 			var server = new HttpListener();
 			// Altere para aceitar qualquer origem
-			server.Prefixes.Add("http://localhost:9090/ws/");
+			server.Prefixes.Add("http://+:9090/ws/");
 			server.Start();
 
 			_logger.LogInformation("WebSocket Server started...");
@@ -37,7 +37,7 @@ namespace MlNetService.Infra.Worker
 
 				_logger.LogInformation("Requisição recebida: {Method} {Url}", context.Request.HttpMethod, context.Request.Url);
 				_logger.LogInformation("Headers: {Headers}", string.Join(", ", context.Request.Headers.AllKeys.Select(k => $"{k}: {context.Request.Headers[k]}")));
-		
+
 				if (context.Request.IsWebSocketRequest)
 				{
 					_logger.LogInformation("Requisição WebSocket detectada. Aceitando conexão...");

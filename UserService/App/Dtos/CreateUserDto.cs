@@ -2,8 +2,8 @@
 
 namespace UserService.App.Dtos
 {
-    public class CreateUserDto
-    {
+	public class CreateUserDto
+	{
 		[Required(ErrorMessage = "Name is required.")]
 		[StringLength(100, ErrorMessage = "Name must be at most 100 characters long.")]
 		public string Name { get; set; } = null!;

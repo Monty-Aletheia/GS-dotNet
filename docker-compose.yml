@@ -36,6 +36,13 @@ services:
     networks:
       - app_net
   
+  mlnet-service:
+      build:
+          context: .
+          dockerfile: ./MlNetService/Dockerfile
+      networks:
+      - app_net
+  
 networks:
   app_net:
     driver: bridge

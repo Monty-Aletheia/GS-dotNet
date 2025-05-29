@@ -6,7 +6,8 @@ namespace UserService.App.Services.Mappers
 {
 	public class UserProfile : Profile
 	{
-		public UserProfile() {
+		public UserProfile()
+		{
 			CreateMap<CreateUserDto, User>().ReverseMap();
 			CreateMap<UpdateUserDto, User>()
 				.ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));

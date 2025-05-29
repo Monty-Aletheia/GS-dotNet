@@ -18,16 +18,16 @@ public class Startup
 		services.AddDbContext<SqlServerContext>(options =>
 			options.UseSqlServer(Configuration.GetConnectionString("SqlServerDB")));
 
-        // Repositories
+		// Repositories
 		services.AddScoped<IUserRepository, UserRepository>();
 
 		// Services
 		services.AddAutoMapper(typeof(UserProfile));
 
-        services.AddScoped<IUserAppService, UserAppService>();
+		services.AddScoped<IUserAppService, UserAppService>();
 
-        // Add controllers
-        services.AddControllers();
+		// Add controllers
+		services.AddControllers();
 
 		// Add Swagger 
 		services.AddEndpointsApiExplorer();

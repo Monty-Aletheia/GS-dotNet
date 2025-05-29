@@ -9,4 +9,3 @@ startup.ConfigureServices(builder.Services);
 var host = builder.Build();
 
 host.Run();
-
