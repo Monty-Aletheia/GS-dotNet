@@ -19,7 +19,7 @@ namespace MlNetService.Infra.Worker
 		protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 		{
 			var server = new HttpListener();
-			// Altere para aceitar qualquer origem
+
 			server.Prefixes.Add("http://+:9090/ws/");
 			server.Start();
 
