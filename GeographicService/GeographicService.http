@@ -1,0 +1,6 @@
+@GeographicService_HostAddress = http://localhost:5081
+
+GET {{GeographicService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

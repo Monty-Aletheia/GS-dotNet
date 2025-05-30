@@ -15,7 +15,7 @@ stages:
         displayName: Build and Push Services
         strategy:
           matrix:
-            auth-service:
+            user-service:
               repository: user-service
               dockerfilePath: ./UserService/Dockerfile
               buildContext: .
