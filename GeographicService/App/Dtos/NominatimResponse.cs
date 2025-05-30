@@ -4,10 +4,7 @@ namespace GeographicService.App.Dtos
 {
 	public class NominatimResponse
 	{
-		[JsonProperty("lat")]
-		public string Lat { get; set; }
-
-		[JsonProperty("lon")]
-		public string Lon { get; set; }
+		public string DisplayName { get; set; }
+		public NominatimAddress Address { get; set; }
 	}
 }
