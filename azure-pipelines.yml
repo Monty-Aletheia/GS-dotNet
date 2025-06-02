@@ -47,3 +47,33 @@ stages:
               tags: |
                 $(tag)
                 latest
+  - stage: Deploy
+    displayName: Deploy to ACI
+    dependsOn: BuildAndPushImages
+    jobs:
+      - job: DeployACI
+        displayName: Deploy Multi-Container ACI
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - task: AzureCLI@2
+            inputs:
+              azureSubscription: 'NomeDaServiceConnection'
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                az container delete \
+                  --name watchtower-aci \
+                  --resource-group rg-gs-watchTower \
+                  --yes
+    
+                az container create \
+                  --resource-group rg-gs-watchTower \
+                  --name watchtower-aci \
+                  --image $(acrName).azurecr.io/user-service:$(tag) \
+                  --image $(acrName).azurecr.io/mlnet-service:$(tag) \
+                  --registry-login-server $(acrName).azurecr.io \
+                  --registry-username $(ACR_USERNAME) \
+                  --registry-password $(ACR_PASSWORD) \
+                  --ports 5000 5051 9090 \
+                  --dns-name-label watchtower-aci-$(Build.BuildId)
