@@ -14,7 +14,7 @@ namespace UserService.Domain.Interfaces.Services
 
 		Task<Device?> GetByIdAsync(Guid id);
 		Task<IEnumerable<Device>> GetAllAsync();
-		Task AddAsync(CreateDeviceDto entity);
+		Task<Device> CreateAsync(CreateDeviceDto entity);
 		Task UpdateAsync(UpdateDeviceDto entity, Guid id);
 		Task DeleteAsync(Guid id);
 	}

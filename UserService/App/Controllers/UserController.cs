@@ -15,6 +15,18 @@ namespace UserService.App.Controllers
 			_userAppService = userAppService;
 		}
 
+		// links HATEOAS
+		private object GetUserLinks(Guid id)
+		{
+			return new[]
+			{
+				new { rel = "self",    href = Url.Action(nameof(GetUserById),   new { id }) },
+				new { rel = "update",  href = Url.Action(nameof(UpdateUser),    new { id }) },
+				new { rel = "delete",  href = Url.Action(nameof(DeleteUser),    new { id }) },
+				new { rel = "all",     href = Url.Action(nameof(GetAllUsers)) }
+			};
+		}
+
 		// POST api/user
 		[HttpPost]
 		public async Task<IActionResult> CreateUser([FromBody] CreateUserDto dto)
@@ -25,7 +37,12 @@ namespace UserService.App.Controllers
 			try
 			{
 				var createdUser = await _userAppService.CreateUserAsync(dto);
-				return CreatedAtAction(nameof(GetUserById), new { id = createdUser.Id }, createdUser);
+				var response = new
+				{
+					user = createdUser,
+					links = GetUserLinks(createdUser.Id)
+				};
+				return CreatedAtAction(nameof(GetUserById), new { id = createdUser.Id }, response);
 			}
 			catch (Exception ex)
 			{
@@ -43,7 +60,12 @@ namespace UserService.App.Controllers
 			try
 			{
 				var createdUser = await _userAppService.CreateUserWithAddressAsync(dto);
-				return CreatedAtAction(nameof(GetUserById), new { id = createdUser.Id }, createdUser);
+				var response = new
+				{
+					user = createdUser,
+					links = GetUserLinks(createdUser.Id)
+				};
+				return CreatedAtAction(nameof(GetUserById), new { id = createdUser.Id }, response);
 			}
 			catch (Exception ex)
 			{
@@ -59,7 +81,13 @@ namespace UserService.App.Controllers
 			if (user == null)
 				return NotFound();
 
-			return Ok(user);
+			var response = new
+			{
+				user,
+				links = GetUserLinks(id)
+			};
+
+			return Ok(response);
 		}
 
 		// GET api/user
@@ -67,7 +95,12 @@ namespace UserService.App.Controllers
 		public async Task<IActionResult> GetAllUsers()
 		{
 			var users = await _userAppService.GetAllUsersAsync();
-			return Ok(users);
+			var response = users.Select(u => new
+			{
+				user = u,
+				links = GetUserLinks(u.Id)
+			});
+			return Ok(response);
 		}
 
 		// PUT api/user/{id}

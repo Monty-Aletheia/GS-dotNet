@@ -5,11 +5,11 @@ using UserService.Infra.Data;
 
 namespace UserService.Infra.Repositories
 {
-	public class DeviceRepository : IDeviceRepository
+	public class DeviceRepository : Repository<Device>, IDeviceRepository
 	{
 		private readonly SqlServerContext _context;
 
-		public DeviceRepository(SqlServerContext context)
+		public DeviceRepository(SqlServerContext context) : base(context)
 		{
 			_context = context;
 		}
@@ -58,32 +58,5 @@ namespace UserService.Infra.Repositories
 			return tokens;
 		}
 
-		public async Task<Device?> GetByIdAsync(Guid id)
-		{
-			return await _context.Devices.FindAsync(id);
-		}
-
-		public async Task<IEnumerable<Device>> GetAllAsync()
-		{
-			return await _context.Devices.ToListAsync();
-		}
-
-		public async Task AddAsync(Device entity)
-		{
-			await _context.Devices.AddAsync(entity);
-			await _context.SaveChangesAsync();
-		}
-
-		public async Task UpdateAsync(Device entity)
-		{
-			_context.Devices.Update(entity);
-			await _context.SaveChangesAsync();
-		}
-
-		public async Task DeleteAsync(Device entity)
-		{
-			_context.Devices.Remove(entity);
-			await _context.SaveChangesAsync();
-		}
 	}
 }

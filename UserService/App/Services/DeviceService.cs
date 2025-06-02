@@ -42,10 +42,11 @@ namespace UserService.App.Services
 		public async Task<IEnumerable<Device>> GetAllAsync()
 			=> await _deviceRepository.GetAllAsync();
 
-		public async Task AddAsync(CreateDeviceDto dto)
+		public async Task<Device> CreateAsync(CreateDeviceDto dto)
 		{
 			var entity = _mapper.Map<Device>(dto);
 			await _deviceRepository.AddAsync(entity);
+			return entity;
 		}
 
 		public async Task UpdateAsync(UpdateDeviceDto dto, Guid id)

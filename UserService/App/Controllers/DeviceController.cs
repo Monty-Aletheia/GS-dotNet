@@ -15,6 +15,18 @@ namespace UserService.App.Controllers
 			_deviceService = deviceService;
 		}
 
+		// Método auxiliar para gerar links HATEOAS
+		private object GetDeviceLinks(Guid id)
+		{
+			return new[]
+			{
+				new { rel = "self",    href = Url.Action(nameof(GetById),   new { id }) },
+				new { rel = "update",  href = Url.Action(nameof(Update),    new { id }) },
+				new { rel = "delete",  href = Url.Action(nameof(Delete),    new { id }) },
+				new { rel = "all",     href = Url.Action(nameof(GetAll)) }
+			};
+		}
+
 		// POST api/device
 		[HttpPost]
 		public async Task<IActionResult> Create([FromBody] CreateDeviceDto dto)
@@ -22,8 +34,13 @@ namespace UserService.App.Controllers
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
 
-			await _deviceService.AddAsync(dto);
-			return Created("", null);
+			var created = await _deviceService.CreateAsync(dto);
+			var response = new
+			{
+				device = created,
+				links = GetDeviceLinks(created.Id)
+			};
+			return CreatedAtAction(nameof(GetById), new { id = created.Id }, response);
 		}
 
 		// GET api/device/{id}
@@ -34,7 +51,13 @@ namespace UserService.App.Controllers
 			if (device == null)
 				return NotFound();
 
-			return Ok(device);
+			var response = new
+			{
+				device,
+				links = GetDeviceLinks(id)
+			};
+
+			return Ok(response);
 		}
 
 		// GET api/device
@@ -42,7 +65,12 @@ namespace UserService.App.Controllers
 		public async Task<IActionResult> GetAll()
 		{
 			var devices = await _deviceService.GetAllAsync();
-			return Ok(devices);
+			var response = devices.Select(d => new
+			{
+				device = d,
+				links = GetDeviceLinks(d.Id)
+			});
+			return Ok(response);
 		}
 
 		// GET api/device/byUser/{userId}
@@ -50,7 +78,12 @@ namespace UserService.App.Controllers
 		public async Task<IActionResult> GetByUserId(Guid userId)
 		{
 			var devices = await _deviceService.GetAllByUserIdAsync(userId);
-			return Ok(devices);
+			var response = devices.Select(d => new
+			{
+				device = d,
+				links = GetDeviceLinks(d.Id)
+			});
+			return Ok(response);
 		}
 
 		// GET api/device/tokensByCity/{city}
