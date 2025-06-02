@@ -1,8 +1,11 @@
 ﻿using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using MlNetService.App.Services;
+using MlNetService.Domain.Interfaces;
 using MlNetService.Infra.Messaging.Consumer;
 using MlNetService.Infra.Worker;
+using MongoDB.Driver;
 
 namespace MlNetService.Infra.Config
 {
@@ -18,9 +21,14 @@ namespace MlNetService.Infra.Config
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.Configure<RabbitMqSettings>(Configuration.GetSection("RabbitMQ"));
+			services.Configure<MongoDBSettings>(Configuration.GetSection("MongoDBSettings"));
+
+			services.AddSingleton<IMongoClient>(
+				s => new MongoClient(Configuration.GetSection("MongoDBSettings")["ConnectionString"]));
 
 			services.AddHostedService<WebSocketServer>();
 
+			services.AddHttpClient<IGeocodingService, GeocodingService>();
 
 			//services.AddMassTransit(x =>
 			//{
