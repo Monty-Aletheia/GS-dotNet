@@ -47,6 +47,7 @@ stages:
               tags: |
                 $(tag)
                 latest
+                
   - stage: Deploy
     displayName: Deploy to ACI
     dependsOn: BuildAndPushImages
@@ -58,7 +59,7 @@ stages:
         steps:
           - task: AzureCLI@2
             inputs:
-              azureSubscription: 'NomeDaServiceConnection'
+              azureSubscription: 'WatchTower-ARM'
               scriptType: 'bash'
               scriptLocation: 'inlineScript'
               inlineScript: |
