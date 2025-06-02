@@ -63,18 +63,42 @@ stages:
               scriptType: 'bash'
               scriptLocation: 'inlineScript'
               inlineScript: |
-                az container delete \
-                  --name watchtower-aci \
-                  --resource-group rg-gs-watchTower \
-                  --yes
-
-                # Substitui variáveis no aci.yml
-                sed -i 's|<ACR_NAME>|$(acrName)|g' aci.yml
-                sed -i 's|<TAG>|$(tag)|g' aci.yml
-                sed -i 's|<ACR_USERNAME>|$(ACR_USERNAME)|g' aci.yml
-                sed -i 's|<ACR_PASSWORD>|$(ACR_PASSWORD)|g' aci.yml
-                sed -i 's|<BUILD_ID>|$(Build.BuildId)|g' aci.yml
+                az container delete --name user-service-aci --resource-group rg-gs-watchTower --yes || true
+                az container delete --name mlnet-service-aci --resource-group rg-gs-watchTower --yes || true
+                az container delete --name rabbitmq-aci --resource-group rg-gs-watchTower --yes || true
 
                 az container create \
                   --resource-group rg-gs-watchTower \
-                  --file aci.yml
+                  --name user-service-aci \
+                  --image $(acrName).azurecr.io/user-service:$(tag) \
+                  --registry-login-server $(acrName).azurecr.io \
+                  --registry-username $(ACR_USERNAME) \
+                  --registry-password $(ACR_PASSWORD) \
+                  --cpu 1 \
+                  --memory 1.5 \
+                  --ports 5000 \
+                  --dns-name-label user-service-aci-$(Build.BuildId) \
+                  --os-type Linux
+
+                az container create \
+                  --resource-group rg-gs-watchTower \
+                  --name mlnet-service-aci \
+                  --image $(acrName).azurecr.io/mlnet-service:$(tag) \
+                  --registry-login-server $(acrName).azurecr.io \
+                  --registry-username $(ACR_USERNAME) \
+                  --registry-password $(ACR_PASSWORD) \
+                  --cpu 1 \
+                  --memory 1.5 \
+                  --ports 5000 9090 \
+                  --dns-name-label mlnet-service-aci-$(Build.BuildId) \
+                  --os-type Linux
+
+                az container create \
+                  --resource-group rg-gs-watchTower \
+                  --name rabbitmq-aci \
+                  --image rabbitmq:3-management \
+                  --cpu 1 \
+                  --memory 1.5 \
+                  --ports 5672 15672 \
+                  --dns-name-label rabbitmq-aci-$(Build.BuildId) \
+                  --os-type Linux
