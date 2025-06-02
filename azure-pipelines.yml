@@ -70,8 +70,8 @@ stages:
                 az container create \
                   --resource-group rg-gs-watchTower \
                   --name user-service-aci \
-                  --image $(acrName).azurecr.io/user-service:$(tag) \
-                  --registry-login-server $(acrName).azurecr.io \
+                  --image watchtowergs.azurecr.io/user-service:latest \
+                  --registry-login-server watchtowergs.azurecr.io \
                   --registry-username $(ACR_USERNAME) \
                   --registry-password $(ACR_PASSWORD) \
                   --cpu 1 \
@@ -83,8 +83,8 @@ stages:
                 az container create \
                   --resource-group rg-gs-watchTower \
                   --name mlnet-service-aci \
-                  --image $(acrName).azurecr.io/mlnet-service:$(tag) \
-                  --registry-login-server $(acrName).azurecr.io \
+                  --image watchtowergs.azurecr.io/mlnet-service:latest \
+                  --registry-login-server watchtowergs.azurecr.io \
                   --registry-username $(ACR_USERNAME) \
                   --registry-password $(ACR_PASSWORD) \
                   --cpu 1 \
