@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using UserService.App.Dtos.User;
-using UserService.Domain.Interfaces.Repositories;
+using UserService.Domain.Interfaces.Services;
 
 namespace UserService.App.Controllers
 {

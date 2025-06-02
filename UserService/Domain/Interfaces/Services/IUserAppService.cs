@@ -1,6 +1,6 @@
 ﻿using UserService.App.Dtos.User;
 
-namespace UserService.Domain.Interfaces.Repositories
+namespace UserService.Domain.Interfaces.Services
 {
 	public interface IUserAppService
 	{

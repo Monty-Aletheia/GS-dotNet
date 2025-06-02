@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using UserService.Domain.Interfaces.Services;
+using UserService.Domain.Interfaces.Repositories;
 using UserService.Domain.Models;
 using UserService.Infra.Data;
 

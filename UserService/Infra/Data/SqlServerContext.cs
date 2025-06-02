@@ -8,5 +8,26 @@ namespace UserService.Infra.Data
 		public SqlServerContext(DbContextOptions options) : base(options) { }
 
 		public DbSet<User> Users { get; set; }
+		public DbSet<Address> Addresses { get; set; }
+		public DbSet<Device> Devices { get; set; }
+
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			// Address - User (1:1)
+			modelBuilder.Entity<Address>()
+				.HasOne(a => a.User)
+				.WithOne(u => u.Address)
+				.HasForeignKey<Address>(a => a.UserId)
+				.OnDelete(DeleteBehavior.Cascade);
+
+			// Device - User (N:1)
+			modelBuilder.Entity<Device>()
+				.HasOne<User>()
+				.WithMany()
+				.HasForeignKey(d => d.userId)
+				.OnDelete(DeleteBehavior.Cascade);
+
+			base.OnModelCreating(modelBuilder);
+		}
 	}
 }

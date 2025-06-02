@@ -23,12 +23,14 @@ public class Startup
 		// Repositories
 		services.AddScoped<IUserRepository, UserRepository>();
 		services.AddScoped<IAddressRepository, AddressRepository>();
+		services.AddScoped<IDeviceRepository, DeviceRepository>();
 
 		// Services
-		services.AddAutoMapper(typeof(UserProfile), typeof(AddressProfile));
+		services.AddAutoMapper(typeof(UserProfile), typeof(AddressProfile), typeof(DeviceProfile));
 
 		services.AddScoped<IUserAppService, UserAppService>();
 		services.AddScoped<IAddressService, AddressService>();
+		services.AddScoped<IDeviceService, DeviceService>();
 
 		// Add controllers
 		services.AddControllers();
