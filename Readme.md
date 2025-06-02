@@ -12,6 +12,7 @@ O **WatchTower** é um serviço RESTful desenvolvido em .NET para gerenciamento 
 - ASP.NET Core Web API
 - Entity Framework Core
 - AutoMapper
+- HATEOAS
 - MassTransit (mensageria)
 - RabbitMQ (mensageria)
 - SQL Server (ou outro banco relacional)
@@ -47,9 +48,6 @@ O **WatchTower** é um serviço RESTful desenvolvido em .NET para gerenciamento 
    dotnet run --project UserService
    ```
 
-6. **Acesse a API**
-   - Por padrão, a API estará disponível em: `http://localhost:5000/api`
-
 ---
 
 ## Documentação dos Endpoints
@@ -76,6 +74,19 @@ O **WatchTower** é um serviço RESTful desenvolvido em .NET para gerenciamento 
 | GET    | `/api/address`              | Lista todos os endereços         | -                           | 200 OK, List<Address>|
 | PUT    | `/api/address/{id}`         | Atualiza endereço                | `UpdateAddressDto`          | 204 No Content       |
 | DELETE | `/api/address/{id}`         | Remove endereço                  | -                           | 204 No Content       |
+
+
+### Dispositivos
+
+| Método | Rota                                 | Descrição                           | Body (DTO)           | Resposta                |
+|--------|--------------------------------------|-------------------------------------|----------------------|-------------------------|
+| POST   | `/api/device`                        | Cria um novo dispositivo            | `CreateDeviceDto`    | 201 Created, Device     |
+| GET    | `/api/device/{id}`                   | Busca dispositivo por ID            | -                    | 200 OK, Device          |
+| GET    | `/api/device`                        | Lista todos os dispositivos         | -                    | 200 OK, List<Device>    |
+| GET    | `/api/device/byUser/{userId}`        | Lista dispositivos de um usuário    | -                    | 200 OK, List<Device>    |
+| GET    | `/api/device/tokensByCity/{city}`    | Lista tokens por cidade             | -                    | 200 OK, List<string>    |
+| PUT    | `/api/device/{id}`                   | Atualiza dispositivo                | `UpdateDeviceDto`    | 204 No Content          |
+| DELETE | `/api/device/{id}`                   | Remove dispositivo                  | -                    | 204 No Content          |
 
 > **Obs:** Consulte os DTOs para detalhes dos campos obrigatórios e exemplos de payload.
 
