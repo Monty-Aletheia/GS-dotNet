@@ -77,5 +77,5 @@ stages:
                   --registry-username $(ACR_USERNAME) \
                   --registry-password $(ACR_PASSWORD) \
                   --ports 5000 5051 9090 \
-                  --dns-name-label watchtower-aci-$(Build.BuildId)
+                  --dns-name-label watchtower-aci-$(Build.BuildId) \
                   --os-type Linux
