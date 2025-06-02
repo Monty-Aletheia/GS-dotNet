@@ -60,6 +60,13 @@ namespace UserService.App.Services
 
 			return _mapper.Map<IEnumerable<UserDto>>(users);
 		}
+		public async Task<UserDto> GetUserByFirebaseAsync(string firebaseId)
+		{
+			var user = await _repository.GetByFirebaseIdAsync(firebaseId);
+			if(user == null) throw new NotFoundException("User not found.");
+
+			return _mapper.Map<UserDto>(user);
+		}
 
 		public async Task<bool> UserExistsByEmailAsync(string email)
 		{

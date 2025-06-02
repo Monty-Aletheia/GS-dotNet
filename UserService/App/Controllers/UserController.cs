@@ -103,6 +103,23 @@ namespace UserService.App.Controllers
 			return Ok(response);
 		}
 
+		// GET api/user/byFirebaseId
+		[HttpGet("/byFirebaseId/{firebaseId}")]
+		public async Task<IActionResult> GetByFirebaseId(string firebaseId)
+		{
+			var user = await _userAppService.GetUserByFirebaseAsync(firebaseId);
+			if (user == null)
+				return NotFound();
+
+			var response = new
+			{
+				user,
+				links = GetUserLinks(user.Id)
+			};
+
+			return Ok(response);
+		}
+
 		// PUT api/user/{id}
 		[HttpPut("{id:guid}")]
 		public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UpdateUserDto dto)

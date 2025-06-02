@@ -25,5 +25,11 @@ namespace UserService.Infra.Repositories
 			return _context.Users
 				.AnyAsync(u => u.Id == id);
 		}
+
+		public Task<User?> GetByFirebaseIdAsync(string id)
+		{
+			return _context.Users
+				.FirstOrDefaultAsync(u => u.FirebaseId == id.ToString());
+		}
 	}
 }

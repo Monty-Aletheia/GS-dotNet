@@ -8,5 +8,7 @@ namespace UserService.Domain.Interfaces.Repositories
 		Task<bool> ExistsByEmailAsync(string email);
 
 		Task<bool> ExistsByIdAsync(Guid id);
+
+		Task<User?> GetByFirebaseIdAsync(string id);
 	}
 }
