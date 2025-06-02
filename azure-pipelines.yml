@@ -15,13 +15,9 @@ stages:
         displayName: Build and Push Services
         strategy:
           matrix:
-            auth-service:
+            user-service:
               repository: user-service
               dockerfilePath: ./UserService/Dockerfile
-              buildContext: .
-            api-gateway:
-              repository: api-gateway
-              dockerfilePath: ./ApiGateway/Dockerfile
               buildContext: .
             mlnet-service:
               repository: mlnet-service

@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.RateLimiting;
 using UserService.App.Services;
 using UserService.App.Services.Mappers;
 using UserService.Domain.Interfaces.Repositories;
@@ -23,12 +25,14 @@ public class Startup
 		// Repositories
 		services.AddScoped<IUserRepository, UserRepository>();
 		services.AddScoped<IAddressRepository, AddressRepository>();
+		services.AddScoped<IDeviceRepository, DeviceRepository>();
 
 		// Services
-		services.AddAutoMapper(typeof(UserProfile), typeof(AddressProfile));
+		services.AddAutoMapper(typeof(UserProfile), typeof(AddressProfile), typeof(DeviceProfile));
 
 		services.AddScoped<IUserAppService, UserAppService>();
 		services.AddScoped<IAddressService, AddressService>();
+		services.AddScoped<IDeviceService, DeviceService>();
 
 		// Add controllers
 		services.AddControllers();
@@ -36,6 +40,17 @@ public class Startup
 		// Add Swagger 
 		services.AddEndpointsApiExplorer();
 		services.AddSwaggerGen();
+
+		services.AddRateLimiter(options =>
+		{
+			options.AddFixedWindowLimiter("fixed", o =>
+			{
+				o.Window = TimeSpan.FromMinutes(1);
+				o.PermitLimit = 100; 
+				o.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+				o.QueueLimit = 0;
+			});
+		});
 
 	}
 
@@ -53,9 +68,11 @@ public class Startup
 
 		app.UseAuthorization();
 
+		app.UseRateLimiter();
+
 		app.UseEndpoints(endpoints =>
 		{
-			endpoints.MapControllers();
+			endpoints.MapControllers().RequireRateLimiting("fixed");
 		});
 	}
 }

@@ -23,5 +23,7 @@ namespace UserService.Domain.Models
 		public string Password { get; set; }
 
 		public Address Address { get; set; }
+
+		public ICollection<Device>? Devices { get; set; } = new List<Device>();
 	}
 }
