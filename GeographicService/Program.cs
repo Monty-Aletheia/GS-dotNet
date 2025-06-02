@@ -1,5 +1,4 @@
 using GeographicService;
-using GeographicService.Domain.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 

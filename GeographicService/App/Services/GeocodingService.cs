@@ -1,8 +1,8 @@
 ﻿using GeographicService.App.Dtos;
 using GeographicService.Domain.Interfaces;
 using System.Globalization;
-using System.Text.Json;
 using System.Globalization;
+using System.Text.Json;
 
 namespace GeographicService.App.Services
 {
