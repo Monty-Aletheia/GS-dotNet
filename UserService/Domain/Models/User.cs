@@ -23,7 +23,7 @@ namespace UserService.Domain.Models
 		public string Password { get; set; }
 
 		[Column("firebase_id")]
-		public string FirebaseId { get; set; }
+		public string? FirebaseId { get; set; }
 
 		public Address Address { get; set; }
 
