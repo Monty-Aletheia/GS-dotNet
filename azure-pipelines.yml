@@ -76,7 +76,7 @@ stages:
                   --registry-password $(ACR_PASSWORD) \
                   --cpu 1 \
                   --memory 1.5 \
-                  --ports 5000 \
+                  --ports 8080 \
                   --dns-name-label user-service-aci-$(Build.BuildId) \
                   --os-type Linux
 
