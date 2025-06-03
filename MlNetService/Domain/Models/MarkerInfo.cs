@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace MlNetService.Domain.Models
 {
-	public class MakerInfo
+	public class MarkerInfo
 	{
 		[BsonId]
 		[BsonRepresentation(BsonType.ObjectId)]
@@ -18,13 +18,13 @@ namespace MlNetService.Domain.Models
 		[BsonElement("desasterType")]
 		public string DesasterType { get; set; }
 
-		[BsonElement("makerType")]
-		public string MakerType { get; set; } = string.Empty;
+		[BsonElement("markerType")]
+		public string MarkerType { get; set; } = string.Empty;
 
-		[BsonElement("makerName")]
-		public string MakerName { get; set; } = string.Empty;
+		[BsonElement("markerName")]
+		public string MarkerName { get; set; } = string.Empty;
 
-		[BsonElement("makerImage")]
-		public string MakerImage { get; set; } = string.Empty;
+		[BsonElement("markerImage")]
+		public string MarkerImage { get; set; } = string.Empty;
 	}
 }
