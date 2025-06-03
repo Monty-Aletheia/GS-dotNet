@@ -14,21 +14,21 @@ services:
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
 
-  user-service:
-    build:
-        context: .
-        dockerfile: ./UserService/Dockerfile
-    ports:
-     - 8080:8080
-    networks:
-      - app_net
+  # user-service:
+  #   build:
+  #       context: .
+  #       dockerfile: ./UserService/Dockerfile
+  #   ports:
+  #    - 8080:8080
+  #   networks:
+  #     - app_net
   
-  mlnet-service:
-      build:
-          context: .
-          dockerfile: ./MlNetService/Dockerfile
-      networks:
-      - app_net
+  # mlnet-service:
+  #     build:
+  #         context: .
+  #         dockerfile: ./MlNetService/Dockerfile
+  #     networks:
+  #     - app_net
   
 networks:
   app_net:

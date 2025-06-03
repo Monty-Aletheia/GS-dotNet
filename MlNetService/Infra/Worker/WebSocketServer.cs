@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using MlNetService.Domain.Models;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace MlNetService.Infra.Worker
 {
@@ -20,7 +17,7 @@ namespace MlNetService.Infra.Worker
 		{
 			var server = new HttpListener();
 
-			server.Prefixes.Add("http://+:9090/ws/");
+			server.Prefixes.Add("http://localhost:9090/ws/");
 			server.Start();
 
 			_logger.LogInformation("WebSocket Server started...");
@@ -67,6 +64,19 @@ namespace MlNetService.Infra.Worker
 			{
 				var msg = Encoding.UTF8.GetString(buffer, 0, result.Count);
 				_logger.LogInformation("Mensagem recebida: {msg}", msg);
+
+				try
+				{
+					var obj = System.Text.Json.JsonSerializer.Deserialize<MessageIoT>(msg);
+					if (obj != null)
+					{
+						_logger.LogInformation("Objeto desserializado: {obj}", System.Text.Json.JsonSerializer.Serialize(obj));
+					}
+				}
+				catch (Exception ex)
+				{
+					_logger.LogError(ex, "Erro ao desserializar JSON");
+				}
 
 				await socket.SendAsync(new ArraySegment<byte>(buffer, 0, result.Count), result.MessageType, result.EndOfMessage, CancellationToken.None);
 				result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
