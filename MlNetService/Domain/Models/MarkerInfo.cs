@@ -26,5 +26,8 @@ namespace MlNetService.Domain.Models
 
 		[BsonElement("markerImage")]
 		public string MarkerImage { get; set; } = string.Empty;
+
+		[BsonElement("sensorData")]
+		public SensorData? SensorData { get; set; }
 	}
 }
