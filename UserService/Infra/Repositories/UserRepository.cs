@@ -13,18 +13,21 @@ namespace UserService.Infra.Repositories
 			_context = context;
 		}
 
-		public Task<bool> ExistsByEmailAsync(string email)
+		public async Task<bool> ExistsByEmailAsync(string email)
 		{
 			var normalizedEmail = email.ToLower();
-			return _context.Users
-				.AnyAsync(u => u.Email.ToLower() == normalizedEmail);
+			var count = await _context.Users
+				.CountAsync(u => u.Email.ToLower() == normalizedEmail);
+			return count > 0;
 		}
 
-		public Task<bool> ExistsByIdAsync(Guid id)
+		public async Task<bool> ExistsByIdAsync(Guid id)
 		{
-			return _context.Users
-				.AnyAsync(u => u.Id == id);
+			var count = await _context.Users
+				.CountAsync(u => u.Id == id);
+			return count > 0;
 		}
+
 
 		public Task<User?> GetByFirebaseIdAsync(string id)
 		{

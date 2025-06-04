@@ -16,7 +16,8 @@ namespace UserService.Infra.Repositories
 
 		public async Task<bool> ExistsByExpoDeviceTokenAsync(string expoDeviceToken)
 		{
-			return await _context.Devices.AnyAsync(d => d.ExpoDeviceToken == expoDeviceToken);
+			var count = await _context.Devices.CountAsync(d => d.ExpoDeviceToken == expoDeviceToken);
+			return count > 0;
 		}
 
 		public async Task<Device?> GetByExpoDeviceTokenAsync(string expoDeviceToken)
