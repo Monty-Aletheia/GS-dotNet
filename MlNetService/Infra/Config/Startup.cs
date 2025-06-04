@@ -1,10 +1,11 @@
 ﻿using MassTransit;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using MlNetService.App.Services;
 using MlNetService.Domain.Interfaces;
+using MlNetService.Infra.Interfaces.WebSockets;
 using MlNetService.Infra.Messaging.Consumer;
 using MlNetService.Infra.Messaging.Producer;
+using MlNetService.Infra.Websockets;
 using MlNetService.Infra.Worker;
 using MongoDB.Driver;
 
@@ -26,11 +27,14 @@ namespace MlNetService.Infra.Config
 
 			services.AddSingleton<IMongoClient>(
 				s => new MongoClient(Configuration.GetSection("MongoDBSettings")["ConnectionString"]));
-
+			// WebSocket DI
 			services.AddHostedService<WebSocketServer>();
+			services.AddSingleton<IWebSocketConnectionHandler, WebSocketConnectionHandler>();
+			services.AddSingleton<IMessageProcessor, MessageProcessor>();
 
 			services.AddHttpClient<IGeocodingService, GeocodingService>();
 			services.AddTransient<MarkerInfoProducer>();
+			services.AddSingleton<MlNetAppService>();
 
 			services.AddMassTransit(x =>
 			{
