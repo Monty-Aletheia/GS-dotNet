@@ -7,15 +7,10 @@ startup.ConfigureServices(builder.Services);
 
 var host = builder.Build();
 
-//await SendTestMessageAsync(host.Services);
+if (args.Contains("train"))
+{
+	var mlService = host.Services.GetRequiredService<MlNetAppService>();
+	mlService.TrainModel();
+}
 
 host.Run();
-
-//async Task SendTestMessageAsync(IServiceProvider services)
-//{
-//	using var scope = services.CreateScope();
-//	var producer = scope.ServiceProvider.GetRequiredService<MarkerInfoProducer>();
-//	var message = new MarkerInfoMessage { Test = "valor" };
-//	await producer.SendMarkerInfoAsync(message);
-//	Console.WriteLine("Mensagem enviada para as duas filas!");
-//}
