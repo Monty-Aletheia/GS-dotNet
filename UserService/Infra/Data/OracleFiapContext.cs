@@ -3,9 +3,9 @@ using UserService.Domain.Models;
 
 namespace UserService.Infra.Data
 {
-	public class SqlServerContext : DbContext
+	public class OracleFiapContext : DbContext
 	{
-		public SqlServerContext(DbContextOptions options) : base(options) { }
+		public OracleFiapContext(DbContextOptions options) : base(options) { }
 
 		public DbSet<User> Users { get; set; }
 		public DbSet<Address> Addresses { get; set; }

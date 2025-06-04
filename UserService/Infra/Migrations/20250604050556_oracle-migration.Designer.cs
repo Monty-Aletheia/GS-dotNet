@@ -2,18 +2,18 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Oracle.EntityFrameworkCore.Metadata;
 using UserService.Infra.Data;
 
 #nullable disable
 
 namespace UserService.Infra.Migrations
 {
-    [DbContext(typeof(SqlServerContext))]
-    [Migration("20250603210353_update-user")]
-    partial class updateuser
+    [DbContext(typeof(OracleFiapContext))]
+    [Migration("20250604050556_oracle-migration")]
+    partial class oraclemigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,43 +23,43 @@ namespace UserService.Infra.Migrations
                 .HasAnnotation("ProductVersion", "9.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            OracleModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("UserService.Domain.Models.Address", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("RAW(16)")
                         .HasColumnName("id");
 
                     b.Property<string>("City")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("NVARCHAR2(2000)")
                         .HasColumnName("city");
 
                     b.Property<string>("Neighborhood")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("NVARCHAR2(2000)")
                         .HasColumnName("neighborhood");
 
                     b.Property<string>("Number")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("NVARCHAR2(2000)")
                         .HasColumnName("number");
 
                     b.Property<string>("State")
                         .IsRequired()
                         .HasMaxLength(2)
-                        .HasColumnType("nvarchar(2)")
+                        .HasColumnType("NVARCHAR2(2)")
                         .HasColumnName("state");
 
                     b.Property<string>("Street")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("NVARCHAR2(2000)")
                         .HasColumnName("street");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("RAW(16)")
                         .HasColumnName("user_id");
 
                     b.HasKey("Id");
@@ -74,24 +74,24 @@ namespace UserService.Infra.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("RAW(16)")
                         .HasColumnName("id");
 
                     b.Property<string>("DeviceName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("NVARCHAR2(2000)")
                         .HasColumnName("device_name");
 
                     b.Property<string>("ExpoDeviceToken")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("NVARCHAR2(2000)")
                         .HasColumnName("expo_device_token");
 
                     b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("RAW(16)");
 
                     b.Property<Guid>("userId")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("RAW(16)")
                         .HasColumnName("user_id");
 
                     b.HasKey("Id");
@@ -107,25 +107,25 @@ namespace UserService.Infra.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("RAW(16)");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("NVARCHAR2(2000)")
                         .HasColumnName("email");
 
                     b.Property<string>("FirebaseId")
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("NVARCHAR2(2000)")
                         .HasColumnName("firebase_id");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("NVARCHAR2(2000)")
                         .HasColumnName("name");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("NVARCHAR2(2000)")
                         .HasColumnName("password");
 
                     b.HasKey("Id");

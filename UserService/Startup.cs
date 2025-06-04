@@ -19,9 +19,11 @@ public class Startup
 
 	public void ConfigureServices(IServiceCollection services)
 	{
-		services.AddDbContext<SqlServerContext>(options =>
-			options.UseSqlServer(Configuration.GetConnectionString("SqlServerDB")));
+		//services.AddDbContext<SqlServerContext>(options =>
+		//	options.UseSqlServer(Configuration.GetConnectionString("SqlServerDB")));
 
+		services.AddDbContext<OracleFiapContext>(options =>
+			options.UseOracle(Configuration.GetConnectionString("OracleFiap")));
 		// Repositories
 		services.AddScoped<IUserRepository, UserRepository>();
 		services.AddScoped<IAddressRepository, AddressRepository>();

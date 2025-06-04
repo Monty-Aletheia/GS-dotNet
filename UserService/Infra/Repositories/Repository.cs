@@ -6,10 +6,10 @@ namespace UserService.Infra.Repositories
 {
 	public class Repository<T> : IRepository<T> where T : class
 	{
-		private readonly SqlServerContext _context;
+		private readonly OracleFiapContext _context;
 		private readonly DbSet<T> _dbSet;
 
-		public Repository(SqlServerContext context)
+		public Repository(OracleFiapContext context)
 		{
 			_context = context;
 			_dbSet = _context.Set<T>();

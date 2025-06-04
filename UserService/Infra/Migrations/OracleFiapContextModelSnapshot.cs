@@ -2,64 +2,61 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Oracle.EntityFrameworkCore.Metadata;
 using UserService.Infra.Data;
 
 #nullable disable
 
 namespace UserService.Infra.Migrations
 {
-    [DbContext(typeof(SqlServerContext))]
-    [Migration("20250529154256_create-address-table")]
-    partial class createaddresstable
+    [DbContext(typeof(OracleFiapContext))]
+    partial class OracleFiapContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "9.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            OracleModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("UserService.Domain.Models.Address", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("RAW(16)")
                         .HasColumnName("id");
 
                     b.Property<string>("City")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("NVARCHAR2(2000)")
                         .HasColumnName("city");
 
                     b.Property<string>("Neighborhood")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("NVARCHAR2(2000)")
                         .HasColumnName("neighborhood");
 
                     b.Property<string>("Number")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("NVARCHAR2(2000)")
                         .HasColumnName("number");
 
                     b.Property<string>("State")
                         .IsRequired()
                         .HasMaxLength(2)
-                        .HasColumnType("nvarchar(2)")
+                        .HasColumnType("NVARCHAR2(2)")
                         .HasColumnName("state");
 
                     b.Property<string>("Street")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("NVARCHAR2(2000)")
                         .HasColumnName("street");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("RAW(16)")
                         .HasColumnName("user_id");
 
                     b.HasKey("Id");
@@ -70,25 +67,62 @@ namespace UserService.Infra.Migrations
                     b.ToTable("tb_address");
                 });
 
+            modelBuilder.Entity("UserService.Domain.Models.Device", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("RAW(16)")
+                        .HasColumnName("id");
+
+                    b.Property<string>("DeviceName")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR2(2000)")
+                        .HasColumnName("device_name");
+
+                    b.Property<string>("ExpoDeviceToken")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR2(2000)")
+                        .HasColumnName("expo_device_token");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("RAW(16)");
+
+                    b.Property<Guid>("userId")
+                        .HasColumnType("RAW(16)")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("userId");
+
+                    b.ToTable("tb_devices");
+                });
+
             modelBuilder.Entity("UserService.Domain.Models.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("RAW(16)");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("NVARCHAR2(2000)")
                         .HasColumnName("email");
+
+                    b.Property<string>("FirebaseId")
+                        .HasColumnType("NVARCHAR2(2000)")
+                        .HasColumnName("firebase_id");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("NVARCHAR2(2000)")
                         .HasColumnName("name");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("NVARCHAR2(2000)")
                         .HasColumnName("password");
 
                     b.HasKey("Id");
@@ -107,10 +141,25 @@ namespace UserService.Infra.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("UserService.Domain.Models.Device", b =>
+                {
+                    b.HasOne("UserService.Domain.Models.User", null)
+                        .WithMany("Devices")
+                        .HasForeignKey("UserId");
+
+                    b.HasOne("UserService.Domain.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("userId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("UserService.Domain.Models.User", b =>
                 {
                     b.Navigation("Address")
                         .IsRequired();
+
+                    b.Navigation("Devices");
                 });
 #pragma warning restore 612, 618
         }

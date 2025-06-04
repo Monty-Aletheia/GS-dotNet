@@ -7,9 +7,9 @@ namespace UserService.Infra.Repositories
 {
 	public class DeviceRepository : Repository<Device>, IDeviceRepository
 	{
-		private readonly SqlServerContext _context;
+		private readonly OracleFiapContext _context;
 
-		public DeviceRepository(SqlServerContext context) : base(context)
+		public DeviceRepository(OracleFiapContext context) : base(context)
 		{
 			_context = context;
 		}

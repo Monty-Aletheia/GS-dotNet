@@ -7,8 +7,8 @@ namespace UserService.Infra.Repositories
 {
 	public class UserRepository : Repository<User>, IUserRepository
 	{
-		private readonly SqlServerContext _context;
-		public UserRepository(SqlServerContext context) : base(context)
+		private readonly OracleFiapContext _context;
+		public UserRepository(OracleFiapContext context) : base(context)
 		{
 			_context = context;
 		}

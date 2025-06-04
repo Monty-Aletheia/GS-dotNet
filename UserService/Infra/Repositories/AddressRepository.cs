@@ -6,8 +6,8 @@ namespace UserService.Infra.Repositories
 {
 	public class AddressRepository : Repository<Address>, IAddressRepository
 	{
-		private readonly SqlServerContext _context;
-		public AddressRepository(SqlServerContext context) : base(context)
+		private readonly OracleFiapContext _context;
+		public AddressRepository(OracleFiapContext context) : base(context)
 		{
 			_context = context;
 		}
