@@ -13,11 +13,23 @@ O **WatchTower** é um serviço RESTful desenvolvido em .NET para gerenciamento 
 - Entity Framework Core
 - AutoMapper
 - HATEOAS
+- Ml.Net
+- MongoDB
 - MassTransit (mensageria)
 - RabbitMQ (mensageria)
 - SQL Server (ou outro banco relacional)
 - Docker (opcional)
 - WebSocket
+
+---
+
+## Arquitetura
+
+- **API RESTful** para operações CRUD de usuários, endereços e dispositivos.
+- **WebSocket** para ingestão e resposta em tempo real de dados de sensores.
+- **Módulo de IA** (ML.NET) para previsão de eventos ambientais.
+- **Mensageria** (RabbitMQ/MassTransit) para integração e escalabilidade.
+- **Persistência** em SQL Server (relacional) e MongoDB (NoSQL).
 
 ---
 
@@ -47,6 +59,26 @@ O **WatchTower** é um serviço RESTful desenvolvido em .NET para gerenciamento 
    ```bash
    dotnet run --project UserService
    ```
+
+---
+
+## Inteligência Artificial e Funcionalidades Avançadas
+
+O **WatchTower** integra um módulo de Inteligência Artificial desenvolvido com ML.NET, responsável por analisar dados de sensores ambientais e prever eventos críticos, como enchentes, tempestades, ondas de calor e incêndios. Essa IA é treinada com um dataset sintético de desastres ambientais, permitindo identificar padrões e antecipar situações de risco em tempo real.
+
+### Como Funciona a IA
+
+- **Entrada de Dados:** Recebe dados de sensores (temperatura, umidade, pressão, vento, chuva, nível de água, gases, luminosidade) via WebSocket.
+- **Processamento:** Os dados são normalizados e enviados para o modelo de machine learning, que retorna a previsão do tipo de evento.
+- **Geolocalização:** O sistema integra serviços de geocodificação reversa para associar coordenadas geográficas a endereços reais, enriquecendo as informações enviadas ao usuário.
+
+
+### Exemplo de Fluxo
+
+1. **Sensor envia dados** para o endpoint WebSocket.
+2. **IA processa** e prevê o tipo de desastre.
+3. **Serviço de geolocalização** converte coordenadas em endereço.
+4. **Resposta** é enviada ao cliente com previsão e localização detalhada.
 
 ---
 
@@ -91,3 +123,35 @@ O **WatchTower** é um serviço RESTful desenvolvido em .NET para gerenciamento 
 > **Obs:** Consulte os DTOs para detalhes dos campos obrigatórios e exemplos de payload.
 
 ---
+
+### Exemplo de Payload WebSocket
+
+**Envio:**
+```json
+{
+  "sensor": {
+    "temperatura": 28.5,
+    "umidade": 80,
+    "pressao": 1012,
+    "vento": 12,
+    "chuva": 10,
+    "nivelAgua": 2.5,
+    "gases": 0.03,
+    "luminosidade": 500
+  },
+  "localizacao": {
+    "latitude": -23.5505,
+    "longitude": -46.6333
+  }
+}
+```
+
+### Resposta: 
+```json
+{
+  "prediction": "Enchente",
+  "lat": -23.5505,
+  "log": -46.6333,
+  "endereco": "Av. Paulista, São Paulo, SP"
+}
+```
