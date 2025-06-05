@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Shared.Errors;
 using UserService.App.Dtos;
 using UserService.App.Dtos.Address;
 using UserService.Domain.Interfaces.Services;
@@ -45,12 +46,20 @@ namespace UserService.App.Controllers
 				};
 				return CreatedAtAction(nameof(GetById), new { id = created.Id }, response);
 			}
-			catch (Exception ex)
+			catch (BadRequestException ex)
 			{
 				return BadRequest(new { message = ex.Message });
 			}
-
+			catch (NotFoundException ex)
+			{
+				return NotFound(new { message = ex.Message });
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, new { message = "Internal server error.", detail = ex.Message });
+			}
 		}
+
 
 		// GET api/address/{id}
 		[HttpGet("{id:guid}")]
@@ -94,9 +103,17 @@ namespace UserService.App.Controllers
 				await _addressService.UpdateAddressAsync(id, dto);
 				return NoContent();
 			}
-			catch (Exception ex)
+			catch (BadRequestException ex)
 			{
 				return BadRequest(new { message = ex.Message });
+			}
+			catch (NotFoundException ex)
+			{
+				return NotFound(new { message = ex.Message });
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, new { message = "Internal server error.", detail = ex.Message });
 			}
 		}
 
@@ -109,9 +126,13 @@ namespace UserService.App.Controllers
 				await _addressService.DeleteAddressAsync(id);
 				return NoContent();
 			}
+			catch (NotFoundException ex)
+			{
+				return NotFound(new { message = ex.Message });
+			}
 			catch (Exception ex)
 			{
-				return BadRequest(new { message = ex.Message });
+				return StatusCode(500, new { message = "Internal server error.", detail = ex.Message });
 			}
 		}
 	}

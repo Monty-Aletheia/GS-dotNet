@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Shared.Errors;
 using UserService.App.Dtos.Device;
 using UserService.Domain.Interfaces.Services;
 
@@ -43,9 +44,18 @@ namespace UserService.App.Controllers
 					links = GetDeviceLinks(created.Id)
 				};
 				return CreatedAtAction(nameof(GetById), new { id = created.Id }, response);
-			} catch (Exception ex)
+			}
+			catch (BadRequestException ex)
+			{
+				return BadRequest(new { message = ex.Message });
+			}
+			catch (NotFoundException ex)
 			{
 				return NotFound(new { message = ex.Message });
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, new { message = "Internal server error.", detail = ex.Message });
 			}
 		}
 
@@ -111,18 +121,39 @@ namespace UserService.App.Controllers
 			{
 				await _deviceService.UpdateAsync(dto, id);
 				return NoContent();
-			} catch (Exception ex)
+			}
+			catch (BadRequestException ex)
+			{
+				return BadRequest(new { message = ex.Message });
+			}
+			catch (NotFoundException ex)
 			{
 				return NotFound(new { message = ex.Message });
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, new { message = "Internal server error.", detail = ex.Message });
 			}
 		}
 
 		// DELETE api/device/{id}
 		[HttpDelete("{id:guid}")]
+		[HttpDelete("{id:guid}")]
 		public async Task<IActionResult> Delete(Guid id)
 		{
-			await _deviceService.DeleteAsync(id);
-			return NoContent();
+			try
+			{
+				await _deviceService.DeleteAsync(id);
+				return NoContent();
+			}
+			catch (NotFoundException ex)
+			{
+				return NotFound(new { message = ex.Message });
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, new { message = "Internal server error.", detail = ex.Message });
+			}
 		}
 	}
 }
