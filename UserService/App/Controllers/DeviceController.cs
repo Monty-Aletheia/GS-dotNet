@@ -45,7 +45,7 @@ namespace UserService.App.Controllers
 				return CreatedAtAction(nameof(GetById), new { id = created.Id }, response);
 			} catch (Exception ex)
 			{
-				return BadRequest(new { message = ex.Message });
+				return NotFound(new { message = ex.Message });
 			}
 		}
 
@@ -113,7 +113,7 @@ namespace UserService.App.Controllers
 				return NoContent();
 			} catch (Exception ex)
 			{
-				return BadRequest(new { message = ex.Message });
+				return NotFound(new { message = ex.Message });
 			}
 		}
 

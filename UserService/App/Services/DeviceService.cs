@@ -10,12 +10,14 @@ namespace UserService.App.Services
 	public class DeviceService : IDeviceService
 	{
 		private readonly IDeviceRepository _deviceRepository;
+		private readonly IUserRepository _userRepository;
 		private readonly IMapper _mapper;
 
-		public DeviceService(IDeviceRepository deviceRepository, IMapper mapper)
+		public DeviceService(IDeviceRepository deviceRepository, IMapper mapper, IUserRepository userRepository)
 		{
 			_deviceRepository = deviceRepository;
 			_mapper = mapper;
+			_userRepository = userRepository;
 		}
 
 		public async Task<bool> ExistsByExpoDeviceTokenAsync(string expoDeviceToken)
@@ -44,6 +46,10 @@ namespace UserService.App.Services
 
 		public async Task<Device> CreateAsync(CreateDeviceDto dto)
 		{
+			var userExists = await _userRepository.ExistsByIdAsync(dto.UserId);
+			if (!userExists)
+				throw new BadRequestException("User does not exist.");
+
 			var entity = _mapper.Map<Device>(dto);
 			await _deviceRepository.AddAsync(entity);
 			return entity;
@@ -51,6 +57,10 @@ namespace UserService.App.Services
 
 		public async Task UpdateAsync(UpdateDeviceDto dto, Guid id)
 		{
+			var userExists = await _userRepository.ExistsByIdAsync(dto.UserId);
+			if (!userExists)
+				throw new BadRequestException("User does not exist.");
+
 			var device = await _deviceRepository.GetByIdAsync(id);
 			if (device == null)
 				throw new NotFoundException("Device not found.");
