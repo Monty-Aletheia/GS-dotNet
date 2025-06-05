@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Oracle.EntityFrameworkCore.Metadata;
 using UserService.Infra.Data;
@@ -11,9 +12,11 @@ using UserService.Infra.Data;
 namespace UserService.Infra.Migrations
 {
     [DbContext(typeof(OracleFiapContext))]
-    partial class OracleFiapContextModelSnapshot : ModelSnapshot
+    [Migration("20250605060226_teste")]
+    partial class teste
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

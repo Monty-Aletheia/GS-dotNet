@@ -7,7 +7,7 @@ namespace UserService.Domain.Models
 	public class Device
 	{
 		[Key]
-		[Column("id")]
+		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public Guid Id { get; set; }
 
 		[Required]
