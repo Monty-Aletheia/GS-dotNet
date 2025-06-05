@@ -27,15 +27,19 @@ namespace MlNetService.Infra.Config
 
 			services.AddSingleton<IMongoClient>(
 				s => new MongoClient(Configuration.GetSection("MongoDBSettings")["ConnectionString"]));
-			// WebSocket DI
-			services.AddHostedService<WebSocketServer>();
-			services.AddSingleton<IWebSocketConnectionHandler, WebSocketConnectionHandler>();
-			services.AddSingleton<IMessageProcessor, MessageProcessor>();
 
+			// WebSocket e serviços relacionados (apenas Scoped)
+			services.AddHostedService<WebSocketServer>();
+			services.AddScoped<IWebSocketConnectionHandler, WebSocketConnectionHandler>();
+			services.AddScoped<IMessageProcessor, MessageProcessor>();
+			services.AddScoped<MarkerInfoService>();
+			services.AddScoped<MarkerInfoProducer>();
+
+			// Outros serviços
 			services.AddHttpClient<IGeocodingService, GeocodingService>();
-			services.AddTransient<MarkerInfoProducer>();
 			services.AddSingleton<MlNetAppService>();
 
+			// MassTransit
 			services.AddMassTransit(x =>
 			{
 				x.AddConsumer<IoTMessageConsumer>();
@@ -50,12 +54,11 @@ namespace MlNetService.Infra.Config
 						h.Password(rabbitMqSettings.Password);
 					});
 
-					cfg.ReceiveEndpoint("java-queue", ep =>
-					{
+					cfg.ReceiveEndpoint("java-queue", ep => {
+						ep.SetQueueArgument("x-message-ttl", 60000);
 					});
-					cfg.ReceiveEndpoint("mobile-queue", ep =>
-					{
-					});
+
+					cfg.ReceiveEndpoint("mobile-queue", ep => { });
 				});
 			});
 		}

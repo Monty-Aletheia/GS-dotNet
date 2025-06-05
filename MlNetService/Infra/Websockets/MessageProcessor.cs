@@ -1,4 +1,5 @@
 ﻿using MlNetService.App.Dtos;
+using MlNetService.App.Services;
 using MlNetService.Domain.Interfaces;
 using MlNetService.Domain.Models;
 using MlNetService.Infra.Interfaces.WebSockets;
@@ -11,15 +12,18 @@ namespace MlNetService.Infra.Websockets
 		private readonly ILogger<MessageProcessor> _logger;
 		private readonly MlNetAppService _mlNetAppService;
 		private readonly IGeocodingService _geocodingService;
+		private readonly MarkerInfoService _markerInfoService;
 
 		public MessageProcessor(
 			ILogger<MessageProcessor> logger,
 			MlNetAppService mlNetAppService,
-			IGeocodingService geocodingService)
+			IGeocodingService geocodingService,
+			MarkerInfoService markerInfoService) 
 		{
 			_logger = logger;
 			_mlNetAppService = mlNetAppService;
 			_geocodingService = geocodingService;
+			_markerInfoService = markerInfoService; 
 		}
 
 		public async Task<string> ProcessAsync(string message)
@@ -31,6 +35,8 @@ namespace MlNetService.Infra.Websockets
 
 				var address = await _geocodingService.ReverseGeocodeAsync(latitude: latLog.Latitude, longitude: latLog.Longitude);
 				var (lat, log) = await _geocodingService.GeocodeAsync(address.City);
+
+				_markerInfoService.PrepareMakerInfoAsync(prediction, lat, log, sensorData);
 
 				return JsonSerializer.Serialize(new { prediction, lat, log });
 			}

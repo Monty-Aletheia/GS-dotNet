@@ -6,15 +6,16 @@ namespace MlNetService.Infra.Worker
 	public class WebSocketServer : BackgroundService
 	{
 		private readonly ILogger<WebSocketServer> _logger;
-		private readonly IWebSocketConnectionHandler _connectionHandler;
+		private readonly IServiceScopeFactory _scopeFactory;
 
 		public WebSocketServer(
 			ILogger<WebSocketServer> logger,
-			IWebSocketConnectionHandler connectionHandler)
+			IServiceScopeFactory scopeFactory)
 		{
 			_logger = logger;
-			_connectionHandler = connectionHandler;
+			_scopeFactory = scopeFactory;
 		}
+
 
 		protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 		{
@@ -38,7 +39,13 @@ namespace MlNetService.Infra.Worker
 				{
 					_logger.LogInformation("Requisição WebSocket detectada. Aceitando conexão...");
 					var wsContext = await context.AcceptWebSocketAsync(null);
-					_ = Task.Run(() => _connectionHandler.HandleAsync(wsContext.WebSocket, stoppingToken));
+
+					_ = Task.Run(async () =>
+					{
+						using var scope = _scopeFactory.CreateScope();
+						var handler = scope.ServiceProvider.GetRequiredService<IWebSocketConnectionHandler>();
+						await handler.HandleAsync(wsContext.WebSocket, stoppingToken);
+					});
 				}
 				else
 				{

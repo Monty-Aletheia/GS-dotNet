@@ -1,5 +1,4 @@
 ﻿using MassTransit;
-using static MassTransit.Monitoring.Performance.BuiltInCounters;
 
 namespace MlNetService.Infra.Messaging.Producer
 {
@@ -16,9 +15,8 @@ namespace MlNetService.Infra.Messaging.Producer
 		{
 			var endpointJava = await _sendEndpointProvider.GetSendEndpoint(new Uri("queue:java-queue"));
 			await endpointJava.Send(message);
+			Console.WriteLine($"Mensagem enviada para a fila Java: {message}");
 
-			var endpointMobile = await _sendEndpointProvider.GetSendEndpoint(new Uri("queue:mobile-queue"));
-			await endpointMobile.Send(message);
 		}
 	}
 }

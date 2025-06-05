@@ -22,9 +22,9 @@ namespace UserService.Infra.Data
 
 			// Device - User (N:1)
 			modelBuilder.Entity<Device>()
-				.HasOne<User>()
-				.WithMany()
-				.HasForeignKey(d => d.userId)
+				.HasOne(d => d.User)
+				.WithMany(u => u.Devices)
+				.HasForeignKey(d => d.UserId)
 				.OnDelete(DeleteBehavior.Cascade);
 
 			base.OnModelCreating(modelBuilder);

@@ -17,7 +17,7 @@ namespace UserService.Infra.Repositories
 		{
 			var normalizedEmail = email.ToLower();
 			var count = await _context.Users
-				.CountAsync(u => u.Email.ToLower() == normalizedEmail);
+				.CountAsync(u => u.Email == normalizedEmail);
 			return count > 0;
 		}
 

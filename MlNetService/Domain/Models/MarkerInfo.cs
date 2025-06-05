@@ -27,6 +27,8 @@ namespace MlNetService.Domain.Models
 		[BsonElement("markerImage")]
 		public string MarkerImage { get; set; } = string.Empty;
 
+		public string Timestamp { get; set; } = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
+
 		[BsonElement("sensorData")]
 		public SensorData? SensorData { get; set; }
 	}

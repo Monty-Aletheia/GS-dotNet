@@ -25,6 +25,8 @@ namespace UserService.App.Services
 
 			var user = _mapper.Map<User>(input);
 
+			user.Email = user.Email.ToLower();
+
 			await _repository.AddAsync(user);
 
 			return _mapper.Map<UserDto>(user);

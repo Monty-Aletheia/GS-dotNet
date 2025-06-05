@@ -20,8 +20,11 @@ namespace UserService.Domain.Models
 
 		[Required]
 		[Column("user_id")]
-		[ForeignKey("UserId")]
-		public Guid userId { get; set; }
+		public Guid UserId { get; set; }
+
+		[ForeignKey(nameof(UserId))]
+		public virtual User User { get; set; }
+
 
 	}
 }

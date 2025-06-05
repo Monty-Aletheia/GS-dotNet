@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace UserService.Infra.Migrations
 {
     /// <inheritdoc />
-    public partial class oraclemigration : Migration
+    public partial class initialdatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -56,17 +56,11 @@ namespace UserService.Infra.Migrations
                     id = table.Column<Guid>(type: "RAW(16)", nullable: false),
                     device_name = table.Column<string>(type: "NVARCHAR2(2000)", nullable: false),
                     expo_device_token = table.Column<string>(type: "NVARCHAR2(2000)", nullable: false),
-                    user_id = table.Column<Guid>(type: "RAW(16)", nullable: false),
-                    UserId = table.Column<Guid>(type: "RAW(16)", nullable: true)
+                    user_id = table.Column<Guid>(type: "RAW(16)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_tb_devices", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_tb_devices_tb_users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "tb_users",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_tb_devices_tb_users_user_id",
                         column: x => x.user_id,
@@ -85,11 +79,6 @@ namespace UserService.Infra.Migrations
                 name: "IX_tb_devices_user_id",
                 table: "tb_devices",
                 column: "user_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_tb_devices_UserId",
-                table: "tb_devices",
-                column: "UserId");
         }
 
         /// <inheritdoc />

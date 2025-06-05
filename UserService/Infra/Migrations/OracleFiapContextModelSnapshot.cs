@@ -84,18 +84,13 @@ namespace UserService.Infra.Migrations
                         .HasColumnType("NVARCHAR2(2000)")
                         .HasColumnName("expo_device_token");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("RAW(16)");
-
-                    b.Property<Guid>("userId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("RAW(16)")
                         .HasColumnName("user_id");
 
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
-
-                    b.HasIndex("userId");
 
                     b.ToTable("tb_devices");
                 });
@@ -143,15 +138,13 @@ namespace UserService.Infra.Migrations
 
             modelBuilder.Entity("UserService.Domain.Models.Device", b =>
                 {
-                    b.HasOne("UserService.Domain.Models.User", null)
+                    b.HasOne("UserService.Domain.Models.User", "User")
                         .WithMany("Devices")
-                        .HasForeignKey("UserId");
-
-                    b.HasOne("UserService.Domain.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("userId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("UserService.Domain.Models.User", b =>
