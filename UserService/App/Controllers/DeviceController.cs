@@ -34,13 +34,19 @@ namespace UserService.App.Controllers
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
 
-			var created = await _deviceService.CreateAsync(dto);
-			var response = new
+			try
 			{
-				device = created,
-				links = GetDeviceLinks(created.Id)
-			};
-			return CreatedAtAction(nameof(GetById), new { id = created.Id }, response);
+				var created = await _deviceService.CreateAsync(dto);
+				var response = new
+				{
+					device = created,
+					links = GetDeviceLinks(created.Id)
+				};
+				return CreatedAtAction(nameof(GetById), new { id = created.Id }, response);
+			} catch (Exception ex)
+			{
+				return BadRequest(new { message = ex.Message });
+			}
 		}
 
 		// GET api/device/{id}
@@ -101,8 +107,14 @@ namespace UserService.App.Controllers
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
 
-			await _deviceService.UpdateAsync(dto, id);
-			return NoContent();
+			try
+			{
+				await _deviceService.UpdateAsync(dto, id);
+				return NoContent();
+			} catch (Exception ex)
+			{
+				return BadRequest(new { message = ex.Message });
+			}
 		}
 
 		// DELETE api/device/{id}

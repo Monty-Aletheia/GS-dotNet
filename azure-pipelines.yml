@@ -77,7 +77,7 @@ stages:
                   --cpu 1 \
                   --memory 1.5 \
                   --ports 8080 \
-                  --dns-name-label user-service-aci-$(Build.BuildId) \
+                  --dns-name-label user-service-aci-watchtower \
                   --os-type Linux
 
                 az container create \
@@ -90,7 +90,7 @@ stages:
                   --cpu 1 \
                   --memory 1.5 \
                   --ports 5000 9090 \
-                  --dns-name-label mlnet-service-aci-$(Build.BuildId) \
+                  --dns-name-label mlnet-service-aci-watchtower \
                   --os-type Linux
 
                 az container create \
@@ -100,5 +100,5 @@ stages:
                   --cpu 1 \
                   --memory 1.5 \
                   --ports 5672 15672 \
-                  --dns-name-label rabbitmq-aci-$(Build.BuildId) \
+                  --dns-name-label rabbitmq-aci-watchtower \
                   --os-type Linux

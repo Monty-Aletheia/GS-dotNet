@@ -55,7 +55,7 @@ namespace MlNetService.Infra.Config
 					});
 
 					cfg.ReceiveEndpoint("java-queue", ep => {
-						ep.SetQueueArgument("x-message-ttl", 60000);
+						//ep.SetQueueArgument("x-message-ttl", 60000);
 					});
 
 					cfg.ReceiveEndpoint("mobile-queue", ep => { });

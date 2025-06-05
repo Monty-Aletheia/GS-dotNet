@@ -22,8 +22,8 @@ namespace UserService.Domain.Models
 		[Column("user_id")]
 		public Guid UserId { get; set; }
 
-		[ForeignKey(nameof(UserId))]
-		public virtual User User { get; set; }
+		[ForeignKey("UserId")]
+		public User User { get; set; }
 
 
 	}
