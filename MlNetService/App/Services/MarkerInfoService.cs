@@ -18,7 +18,6 @@ namespace MlNetService.App.Services
 			_collection = database.GetCollection<MarkerInfo>("MakerInfos");
 		}
 
-
 		public List<MarkerInfo> Get() => _collection.Find(m => true).ToList();
 
 		public MarkerInfo GetById(string id) => _collection.Find(m => m.Id == id).FirstOrDefault();
@@ -33,20 +32,51 @@ namespace MlNetService.App.Services
 
 		public void Delete(string id) => _collection.DeleteOne(m => m.Id == id);
 
-		async public void  PrepareMakerInfoAsync(string prediction, double lat, double log , SensorData? sensorData)
+		public async Task UpsertMarkerInfoAsync(string prediction, double lat, double lon, SensorData? sensorData)
 		{
-			var marker = new MarkerInfo
-			{
-				Latitude = lat,
-				Longitude = log,
-				DesasterType = prediction,
-				MarkerType = "Disaster",
-				MarkerName = "Disaster Marker",
-				MarkerImage = "https://example.com/disaster-marker.png",
-				SensorData = sensorData
-			};
+			var existingMarker = _collection.Find(m => m.Latitude == lat && m.Longitude == lon).FirstOrDefault();
 
-			await _makerInfoProducer.SendMarkerInfoAsync(marker);
+			if (prediction.ToLower() != "normal")
+			{
+				if (existingMarker != null)
+				{
+					existingMarker.DesasterType = prediction;
+					existingMarker.SensorData = sensorData;
+					existingMarker.Timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
+
+					await _collection.ReplaceOneAsync(m => m.Id == existingMarker.Id, existingMarker);
+					await _makerInfoProducer.SendMarkerInfoAsync(existingMarker);
+				}
+				else
+				{
+					var newMarker = new MarkerInfo
+					{
+						Latitude = lat,
+						Longitude = lon,
+						DesasterType = prediction,
+						MarkerType = "Disaster",
+						MarkerName = "Disaster Marker",
+						MarkerImage = "https://example.com/disaster-marker.png",
+						SensorData = sensorData
+					};
+
+					await _collection.InsertOneAsync(newMarker);
+					await _makerInfoProducer.SendMarkerInfoAsync(newMarker);
+				}
+			}
+			else
+			{
+				if (existingMarker != null)
+				{
+					await _collection.DeleteOneAsync(m => m.Id == existingMarker.Id);
+				}
+			}
+		}
+
+		public async Task SendAllMarkersInfosAsync()
+		{
+			var markers = Get();
+			await _makerInfoProducer.SendAllMarkersInfosAsync(markers);
 		}
 
 	}

@@ -42,7 +42,7 @@ namespace MlNetService.Infra.Config
 			// MassTransit
 			services.AddMassTransit(x =>
 			{
-				x.AddConsumer<IoTMessageConsumer>();
+				x.AddConsumer<GetMarkersConsumer>();
 
 				x.UsingRabbitMq((context, cfg) =>
 				{
@@ -59,6 +59,12 @@ namespace MlNetService.Infra.Config
 					});
 
 					cfg.ReceiveEndpoint("mobile-queue", ep => { });
+
+					cfg.ReceiveEndpoint("get-markers-request-queue", e =>
+					{
+						e.UseRawJsonSerializer();
+						e.ConfigureConsumer<GetMarkersConsumer>(context);
+					});
 				});
 			});
 		}

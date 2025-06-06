@@ -27,6 +27,13 @@ namespace MlNetService.Domain.Models
 		[BsonElement("markerImage")]
 		public string MarkerImage { get; set; } = string.Empty;
 
+		[BsonElement("description")]
+		public string? description { get; set; } = string.Empty;
+
+		[BsonElement("AiAnalysis")]
+		public string? AiAnalysis { get; set; } = string.Empty;
+
+		[BsonElement("timestamp")]
 		public string Timestamp { get; set; } = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
 
 		[BsonElement("sensorData")]

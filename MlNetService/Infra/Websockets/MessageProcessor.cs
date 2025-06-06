@@ -1,4 +1,4 @@
-﻿using MlNetService.App.Dtos;
+﻿using MlNetService.App.Dtos.WebSocket;
 using MlNetService.App.Services;
 using MlNetService.Domain.Interfaces;
 using MlNetService.Domain.Models;
@@ -36,7 +36,7 @@ namespace MlNetService.Infra.Websockets
 				var address = await _geocodingService.ReverseGeocodeAsync(latitude: latLog.Latitude, longitude: latLog.Longitude);
 				var (lat, log) = await _geocodingService.GeocodeAsync(address.City);
 
-				_markerInfoService.PrepareMakerInfoAsync(prediction, lat, log, sensorData);
+				await _markerInfoService.UpsertMarkerInfoAsync(prediction, lat, log, sensorData);
 
 				return JsonSerializer.Serialize(new { prediction, lat, log });
 			}

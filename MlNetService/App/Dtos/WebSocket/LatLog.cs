@@ -1,4 +1,4 @@
-﻿namespace MlNetService.App.Dtos
+﻿namespace MlNetService.App.Dtos.WebSocket
 {
 	public class LatLog
 	{

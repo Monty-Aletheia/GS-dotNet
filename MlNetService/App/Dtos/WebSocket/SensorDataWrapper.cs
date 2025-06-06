@@ -1,6 +1,6 @@
 ﻿using MlNetService.Domain.Models;
 
-namespace MlNetService.App.Dtos
+namespace MlNetService.App.Dtos.WebSocket
 {
 	public class SensorDataWrapper
 	{
