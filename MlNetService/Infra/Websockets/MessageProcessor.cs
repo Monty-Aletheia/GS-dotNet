@@ -18,12 +18,12 @@ namespace MlNetService.Infra.Websockets
 			ILogger<MessageProcessor> logger,
 			MlNetAppService mlNetAppService,
 			IGeocodingService geocodingService,
-			MarkerInfoService markerInfoService) 
+			MarkerInfoService markerInfoService)
 		{
 			_logger = logger;
 			_mlNetAppService = mlNetAppService;
 			_geocodingService = geocodingService;
-			_markerInfoService = markerInfoService; 
+			_markerInfoService = markerInfoService;
 		}
 
 		public async Task<string> ProcessAsync(string message)

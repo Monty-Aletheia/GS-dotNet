@@ -21,12 +21,6 @@ namespace MlNetService.Domain.Models
 		[BsonElement("markerType")]
 		public string MarkerType { get; set; } = string.Empty;
 
-		[BsonElement("markerName")]
-		public string MarkerName { get; set; } = string.Empty;
-
-		[BsonElement("markerImage")]
-		public string MarkerImage { get; set; } = string.Empty;
-
 		[BsonElement("description")]
 		public string? description { get; set; } = string.Empty;
 

@@ -1,5 +1,6 @@
 ﻿using MassTransit;
 using Microsoft.Extensions.Options;
+using MlNetService.App.Dtos.Messaging;
 using MlNetService.App.Services;
 using MlNetService.Domain.Interfaces;
 using MlNetService.Infra.Interfaces.WebSockets;
@@ -44,6 +45,8 @@ namespace MlNetService.Infra.Config
 			{
 				x.AddConsumer<GetMarkersConsumer>();
 
+				x.AddConsumer<CreateMarkerInfoConsumer>();
+
 				x.UsingRabbitMq((context, cfg) =>
 				{
 					var rabbitMqSettings = context.GetRequiredService<IOptions<RabbitMqSettings>>().Value;
@@ -54,16 +57,23 @@ namespace MlNetService.Infra.Config
 						h.Password(rabbitMqSettings.Password);
 					});
 
-					cfg.ReceiveEndpoint("java-queue", ep => {
-						//ep.SetQueueArgument("x-message-ttl", 60000);
+					cfg.ReceiveEndpoint("java-queue", ep =>
+					{
 					});
 
 					cfg.ReceiveEndpoint("mobile-queue", ep => { });
+
 
 					cfg.ReceiveEndpoint("get-markers-request-queue", e =>
 					{
 						e.UseRawJsonSerializer();
 						e.ConfigureConsumer<GetMarkersConsumer>(context);
+					});
+
+					cfg.ReceiveEndpoint("create-marker-info", e =>
+					{
+						e.UseRawJsonSerializer();
+						e.ConfigureConsumer<CreateMarkerInfoConsumer>(context);
 					});
 				});
 			});

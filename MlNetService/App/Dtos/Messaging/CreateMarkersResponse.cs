@@ -2,9 +2,8 @@
 
 namespace MlNetService.App.Dtos.Messaging
 {
-
-	public class GetMarkersResponse
+	public class CreateMarkersResponse
 	{
-		public List<MarkerInfo> Markers { get; set; }
+		public MarkerInfo MarkerInfo { get; set; }
 	}
 }

@@ -34,14 +34,14 @@ public class MlNetAppService
 		var partitions = _mlContext.Data.TrainTestSplit(dataView, testFraction: 0.2);
 
 		var pipeline = _mlContext.Transforms.Concatenate("Features",
-	    	nameof(SensorData.Temperatura),
-	    	nameof(SensorData.Umidade),
-	    	nameof(SensorData.Pressao),
-	    	nameof(SensorData.Vento),
-	    	nameof(SensorData.Chuva),
-	    	nameof(SensorData.NivelAgua),
-	    	nameof(SensorData.Gases),
-	    	nameof(SensorData.Luminosidade))
+			nameof(SensorData.Temperatura),
+			nameof(SensorData.Umidade),
+			nameof(SensorData.Pressao),
+			nameof(SensorData.Vento),
+			nameof(SensorData.Chuva),
+			nameof(SensorData.NivelAgua),
+			nameof(SensorData.Gases),
+			nameof(SensorData.Luminosidade))
 		.Append(_mlContext.Transforms.NormalizeMinMax("Features"))
 		.Append(_mlContext.Transforms.Conversion.MapValueToKey("Label", nameof(SensorData.Evento)))
 		.Append(_mlContext.MulticlassClassification.Trainers.LightGbm("Label", "Features"))

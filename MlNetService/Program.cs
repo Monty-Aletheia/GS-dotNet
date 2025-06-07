@@ -1,3 +1,5 @@
+using MassTransit;
+using MlNetService.App.Dtos.Messaging;
 using MlNetService.Infra.Config;
 
 var builder = Host.CreateApplicationBuilder(args);
@@ -12,5 +14,6 @@ if (args.Contains("train"))
 	var mlService = host.Services.GetRequiredService<MlNetAppService>();
 	mlService.TrainModel();
 }
+
 
 host.Run();

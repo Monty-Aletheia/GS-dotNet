@@ -14,6 +14,9 @@ namespace MlNetService.Infra.Messaging.Producer
 		public async Task SendMarkerInfoAsync(object message)
 		{
 			var endpointJava = await _sendEndpointProvider.GetSendEndpoint(new Uri("queue:java-queue"));
+
+			var endpointMobile = await _sendEndpointProvider.GetSendEndpoint(new Uri("queue:mobile-queue"));
+
 			await endpointJava.Send(message);
 		}
 

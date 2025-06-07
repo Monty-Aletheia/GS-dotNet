@@ -1,5 +1,5 @@
-﻿using System.Net;
-using MlNetService.Infra.Interfaces.WebSockets;
+﻿using MlNetService.Infra.Interfaces.WebSockets;
+using System.Net;
 
 namespace MlNetService.Infra.Worker
 {

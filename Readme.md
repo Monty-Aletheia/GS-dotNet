@@ -17,7 +17,7 @@ O **WatchTower** é um serviço RESTful desenvolvido em .NET para gerenciamento 
 - MongoDB
 - MassTransit (mensageria)
 - RabbitMQ (mensageria)
-- SQL Server (ou outro banco relacional)
+- Oracle Database
 - Docker (opcional)
 - WebSocket
 
@@ -29,7 +29,7 @@ O **WatchTower** é um serviço RESTful desenvolvido em .NET para gerenciamento 
 - **WebSocket** para ingestão e resposta em tempo real de dados de sensores.
 - **Módulo de IA** (ML.NET) para previsão de eventos ambientais.
 - **Mensageria** (RabbitMQ/MassTransit) para integração e escalabilidade.
-- **Persistência** em SQL Server (relacional) e MongoDB (NoSQL).
+- **Persistência** em OracleDB (relacional) e MongoDB (NoSQL).
 
 ---
 
@@ -37,7 +37,6 @@ O **WatchTower** é um serviço RESTful desenvolvido em .NET para gerenciamento 
 
 1. **Pré-requisitos**
    - [.NET 8 SDK](https://dotnet.microsoft.com/download)
-   - [SQL Server](https://www.microsoft.com/pt-br/sql-server/sql-server-downloads) ou outro banco relacional
    - [RabbitMQ](https://www.rabbitmq.com/download.html) (opcional, para mensageria)
    - Docker (opcional)
 
@@ -57,7 +56,7 @@ O **WatchTower** é um serviço RESTful desenvolvido em .NET para gerenciamento 
 
 5. **Execute o projeto**
    ```bash
-   dotnet run --project UserService
+   dotnet run --project UserService & dotnet run --project MlnetService
    ```
 
 ---

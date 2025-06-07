@@ -34,44 +34,93 @@ namespace MlNetService.App.Services
 
 		public async Task UpsertMarkerInfoAsync(string prediction, double lat, double lon, SensorData? sensorData)
 		{
-			var existingMarker = _collection.Find(m => m.Latitude == lat && m.Longitude == lon).FirstOrDefault();
+			var existingMarker = FindMarkerByLocation(lat, lon);
 
-			if (prediction.ToLower() != "normal")
+			if (!IsNormalPrediction(prediction))
 			{
 				if (existingMarker != null)
 				{
-					existingMarker.DesasterType = prediction;
-					existingMarker.SensorData = sensorData;
-					existingMarker.Timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
-
-					await _collection.ReplaceOneAsync(m => m.Id == existingMarker.Id, existingMarker);
-					await _makerInfoProducer.SendMarkerInfoAsync(existingMarker);
+					await UpdateMarkerAsync(existingMarker, prediction, sensorData);
 				}
 				else
 				{
-					var newMarker = new MarkerInfo
-					{
-						Latitude = lat,
-						Longitude = lon,
-						DesasterType = prediction,
-						MarkerType = "Disaster",
-						MarkerName = "Disaster Marker",
-						MarkerImage = "https://example.com/disaster-marker.png",
-						SensorData = sensorData
-					};
-
-					await _collection.InsertOneAsync(newMarker);
-					await _makerInfoProducer.SendMarkerInfoAsync(newMarker);
+					var newMarker = CreateNewMarker(prediction, lat, lon, sensorData);
+					await InsertMarkerAsync(newMarker);
 				}
+			}
+			else if (existingMarker != null)
+			{
+				await _collection.DeleteOneAsync(m => m.Id == existingMarker.Id);
+			}
+		}
+
+		public async Task UpsertMarkerInfoAsync(MarkerInfo markerInfo)
+		{
+			var existingMarker = FindMarkerByLocation(markerInfo.Latitude, markerInfo.Longitude);
+
+			if (existingMarker != null)
+			{
+				existingMarker.Timestamp = GetCurrentTimestamp();
+				await ReplaceMarkerAsync(existingMarker);
 			}
 			else
 			{
-				if (existingMarker != null)
-				{
-					await _collection.DeleteOneAsync(m => m.Id == existingMarker.Id);
-				}
+				await InsertMarkerAsync(markerInfo);
 			}
 		}
+
+		// Helpers
+
+		private MarkerInfo? FindMarkerByLocation(double lat, double lon)
+		{
+			return _collection.Find(m => m.Latitude == lat && m.Longitude == lon).FirstOrDefault();
+		}
+
+		private bool IsNormalPrediction(string prediction)
+		{
+			return prediction.Equals("normal", StringComparison.OrdinalIgnoreCase);
+		}
+
+		private async Task UpdateMarkerAsync(MarkerInfo marker, string prediction, SensorData? sensorData)
+		{
+			marker.DesasterType = prediction;
+			marker.SensorData = sensorData;
+			marker.Timestamp = GetCurrentTimestamp();
+
+			await ReplaceMarkerAsync(marker);
+		}
+
+		private async Task ReplaceMarkerAsync(MarkerInfo marker)
+		{
+			await _collection.ReplaceOneAsync(m => m.Id == marker.Id, marker);
+			await _makerInfoProducer.SendMarkerInfoAsync(marker);
+		}
+
+		private async Task InsertMarkerAsync(MarkerInfo marker)
+		{
+			marker.Timestamp ??= GetCurrentTimestamp();
+			await _collection.InsertOneAsync(marker);
+			await _makerInfoProducer.SendMarkerInfoAsync(marker);
+		}
+
+		private MarkerInfo CreateNewMarker(string prediction, double lat, double lon, SensorData? sensorData)
+		{
+			return new MarkerInfo
+			{
+				Latitude = lat,
+				Longitude = lon,
+				DesasterType = prediction,
+				MarkerType = "Disaster",
+				SensorData = sensorData,
+				Timestamp = GetCurrentTimestamp()
+			};
+		}
+
+		private string GetCurrentTimestamp()
+		{
+			return DateTime.UtcNow.ToString("o");
+		}
+
 
 		public async Task SendAllMarkersInfosAsync()
 		{
