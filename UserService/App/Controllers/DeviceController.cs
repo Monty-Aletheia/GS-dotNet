@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Shared.Errors;
 using UserService.App.Dtos.Device;
 using UserService.Domain.Interfaces.Services;
 
@@ -34,13 +35,28 @@ namespace UserService.App.Controllers
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
 
-			var created = await _deviceService.CreateAsync(dto);
-			var response = new
+			try
 			{
-				device = created,
-				links = GetDeviceLinks(created.Id)
-			};
-			return CreatedAtAction(nameof(GetById), new { id = created.Id }, response);
+				var created = await _deviceService.CreateAsync(dto);
+				var response = new
+				{
+					device = created,
+					links = GetDeviceLinks(created.Id)
+				};
+				return CreatedAtAction(nameof(GetById), new { id = created.Id }, response);
+			}
+			catch (BadRequestException ex)
+			{
+				return BadRequest(new { message = ex.Message });
+			}
+			catch (NotFoundException ex)
+			{
+				return NotFound(new { message = ex.Message });
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, new { message = "Internal server error.", detail = ex.Message });
+			}
 		}
 
 		// GET api/device/{id}
@@ -101,16 +117,43 @@ namespace UserService.App.Controllers
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
 
-			await _deviceService.UpdateAsync(dto, id);
-			return NoContent();
+			try
+			{
+				await _deviceService.UpdateAsync(dto, id);
+				return NoContent();
+			}
+			catch (BadRequestException ex)
+			{
+				return BadRequest(new { message = ex.Message });
+			}
+			catch (NotFoundException ex)
+			{
+				return NotFound(new { message = ex.Message });
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, new { message = "Internal server error.", detail = ex.Message });
+			}
 		}
 
 		// DELETE api/device/{id}
 		[HttpDelete("{id:guid}")]
+		[HttpDelete("{id:guid}")]
 		public async Task<IActionResult> Delete(Guid id)
 		{
-			await _deviceService.DeleteAsync(id);
-			return NoContent();
+			try
+			{
+				await _deviceService.DeleteAsync(id);
+				return NoContent();
+			}
+			catch (NotFoundException ex)
+			{
+				return NotFound(new { message = ex.Message });
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, new { message = "Internal server error.", detail = ex.Message });
+			}
 		}
 	}
 }

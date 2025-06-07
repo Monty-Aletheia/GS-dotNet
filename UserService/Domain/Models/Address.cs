@@ -8,7 +8,7 @@ namespace UserService.Domain.Models
 	public class Address
 	{
 		[Key]
-		[Column("id")]
+		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public Guid Id { get; set; }
 
 		[Required]

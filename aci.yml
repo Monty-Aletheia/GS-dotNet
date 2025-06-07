@@ -1,0 +1,36 @@
+apiVersion: '2021-09-01'
+location: eastus
+name: watchtower-aci
+properties:
+  containers:
+    - name: user-service
+      properties:
+        image: <ACR_NAME>.azurecr.io/user-service:<TAG>
+        resources:
+          requests:
+            cpu: 1
+            memoryInGb: 1.5
+        ports:
+          - port: 5000
+    - name: mlnet-service
+      properties:
+        image: <ACR_NAME>.azurecr.io/mlnet-service:<TAG>
+        resources:
+          requests:
+            cpu: 1
+            memoryInGb: 1.5
+        ports:
+          - port: 9090
+  osType: Linux
+  ipAddress:
+    type: Public
+    dnsNameLabel: watchtower-aci-<BUILD_ID>
+    ports:
+      - protocol: tcp
+        port: 5000
+      - protocol: tcp
+        port: 9090
+  imageRegistryCredentials:
+    - server: <ACR_NAME>.azurecr.io
+      username: <ACR_USERNAME>
+      password: <ACR_PASSWORD>

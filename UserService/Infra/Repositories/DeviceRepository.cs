@@ -7,9 +7,9 @@ namespace UserService.Infra.Repositories
 {
 	public class DeviceRepository : Repository<Device>, IDeviceRepository
 	{
-		private readonly SqlServerContext _context;
+		private readonly OracleFiapContext _context;
 
-		public DeviceRepository(SqlServerContext context) : base(context)
+		public DeviceRepository(OracleFiapContext context) : base(context)
 		{
 			_context = context;
 		}
@@ -26,7 +26,7 @@ namespace UserService.Infra.Repositories
 
 		public async Task<IEnumerable<Device>> GetAllByUserIdAsync(Guid userId)
 		{
-			return await _context.Devices.Where(d => d.userId == userId).ToListAsync();
+			return await _context.Devices.Where(d => d.UserId == userId).ToListAsync();
 		}
 
 		public async Task<bool> DeleteByExpoDeviceTokenAsync(string expoDeviceToken)
@@ -40,7 +40,7 @@ namespace UserService.Infra.Repositories
 
 		public async Task<bool> DeleteByUserIdAsync(Guid userId)
 		{
-			var devices = await _context.Devices.Where(d => d.userId == userId).ToListAsync();
+			var devices = await _context.Devices.Where(d => d.UserId == userId).ToListAsync();
 			if (!devices.Any()) return false;
 			_context.Devices.RemoveRange(devices);
 			await _context.SaveChangesAsync();
@@ -51,12 +51,11 @@ namespace UserService.Infra.Repositories
 		{
 			var tokens = await (from u in _context.Users
 								join a in _context.Addresses on u.Id equals a.UserId
-								join d in _context.Devices on u.Id equals d.userId
+								join d in _context.Devices on u.Id equals d.UserId
 								where a.City == city
 								select d.ExpoDeviceToken).ToListAsync();
 
 			return tokens;
 		}
-
 	}
 }

@@ -17,6 +17,9 @@ namespace UserService.App.Dtos.User
 		[StringLength(100, MinimumLength = 6, ErrorMessage = "Password must be between 6 and 100 characters long.")]
 		public string Password { get; set; } = null!;
 
+		public string? FirebaseId { get; set; }
+
+
 		[Required(ErrorMessage = "Address is required.")]
 		public CreateAddressWithUserDto Address { get; set; } = null!;
 	}

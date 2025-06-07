@@ -22,6 +22,9 @@ namespace UserService.Domain.Models
 		[Column("password")]
 		public string Password { get; set; }
 
+		[Column("firebase_id")]
+		public string? FirebaseId { get; set; }
+
 		public Address Address { get; set; }
 
 		public ICollection<Device>? Devices { get; set; } = new List<Device>();

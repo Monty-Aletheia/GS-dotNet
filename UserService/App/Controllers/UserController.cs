@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Shared.Errors;
 using UserService.App.Dtos.User;
 using UserService.Domain.Interfaces.Services;
 
@@ -44,9 +45,17 @@ namespace UserService.App.Controllers
 				};
 				return CreatedAtAction(nameof(GetUserById), new { id = createdUser.Id }, response);
 			}
-			catch (Exception ex)
+			catch (BadRequestException ex)
 			{
 				return BadRequest(new { message = ex.Message });
+			}
+			catch (NotFoundException ex)
+			{
+				return NotFound(new { message = ex.Message });
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, new { message = "Internal server error.", detail = ex.Message });
 			}
 		}
 
@@ -67,11 +76,20 @@ namespace UserService.App.Controllers
 				};
 				return CreatedAtAction(nameof(GetUserById), new { id = createdUser.Id }, response);
 			}
-			catch (Exception ex)
+			catch (BadRequestException ex)
 			{
 				return BadRequest(new { message = ex.Message });
 			}
+			catch (NotFoundException ex)
+			{
+				return NotFound(new { message = ex.Message });
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, new { message = "Internal server error.", detail = ex.Message });
+			}
 		}
+
 
 		// GET api/user/{id}
 		[HttpGet("{id:guid}")]
@@ -90,6 +108,7 @@ namespace UserService.App.Controllers
 			return Ok(response);
 		}
 
+
 		// GET api/user
 		[HttpGet]
 		public async Task<IActionResult> GetAllUsers()
@@ -101,6 +120,30 @@ namespace UserService.App.Controllers
 				links = GetUserLinks(u.Id)
 			});
 			return Ok(response);
+		}
+
+		// GET api/user/byFirebaseId
+		[HttpGet("/byFirebaseId/{firebaseId}")]
+		public async Task<IActionResult> GetByFirebaseId(string firebaseId)
+		{
+			try
+			{
+				var user = await _userAppService.GetUserByFirebaseAsync(firebaseId);
+				var response = new
+				{
+					user,
+					links = GetUserLinks(user.Id)
+				};
+				return Ok(response);
+			}
+			catch (NotFoundException ex)
+			{
+				return NotFound(new { message = ex.Message });
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, new { message = "Internal server error.", detail = ex.Message });
+			}
 		}
 
 		// PUT api/user/{id}
@@ -115,13 +158,21 @@ namespace UserService.App.Controllers
 				await _userAppService.UpdateUserAsync(id, dto);
 				return NoContent();
 			}
-			catch (Exception ex)
+			catch (BadRequestException ex)
 			{
 				return BadRequest(new { message = ex.Message });
 			}
+			catch (NotFoundException ex)
+			{
+				return NotFound(new { message = ex.Message });
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, new { message = "Internal server error.", detail = ex.Message });
+			}
 		}
 
-		// DELETE api/user/{id}
+
 		[HttpDelete("{id:guid}")]
 		public async Task<IActionResult> DeleteUser(Guid id)
 		{
@@ -130,9 +181,13 @@ namespace UserService.App.Controllers
 				await _userAppService.DeleteUserAsync(id);
 				return NoContent();
 			}
+			catch (NotFoundException ex)
+			{
+				return NotFound(new { message = ex.Message });
+			}
 			catch (Exception ex)
 			{
-				return BadRequest(new { message = ex.Message });
+				return StatusCode(500, new { message = "Internal server error.", detail = ex.Message });
 			}
 		}
 	}

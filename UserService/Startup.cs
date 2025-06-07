@@ -19,9 +19,11 @@ public class Startup
 
 	public void ConfigureServices(IServiceCollection services)
 	{
-		services.AddDbContext<SqlServerContext>(options =>
-			options.UseSqlServer(Configuration.GetConnectionString("SqlServerDB")));
+		//services.AddDbContext<SqlServerContext>(options =>
+		//	options.UseSqlServer(Configuration.GetConnectionString("SqlServerDB")));
 
+		services.AddDbContext<OracleFiapContext>(options =>
+			options.UseOracle(Configuration.GetConnectionString("OracleFiap")));
 		// Repositories
 		services.AddScoped<IUserRepository, UserRepository>();
 		services.AddScoped<IAddressRepository, AddressRepository>();
@@ -46,7 +48,7 @@ public class Startup
 			options.AddFixedWindowLimiter("fixed", o =>
 			{
 				o.Window = TimeSpan.FromMinutes(1);
-				o.PermitLimit = 100; 
+				o.PermitLimit = 100;
 				o.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
 				o.QueueLimit = 0;
 			});

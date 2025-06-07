@@ -13,35 +13,22 @@ services:
       - app_net 
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
-    
-  api-gateway:
-    build:
-        context: .
-        dockerfile: ./ApiGateWay/Dockerfile
-    ports:
-      - 5000:8080
-    env_file:
-      - .env
-    depends_on:
-     - user-service 
-    networks:
-      - app_net
 
-  user-service:
-    build:
-        context: .
-        dockerfile: ./UserService/Dockerfile
-    ports:
-     - 8080:8080
-    networks:
-      - app_net
+  # user-service:
+  #   build:
+  #       context: .
+  #       dockerfile: ./UserService/Dockerfile
+  #   ports:
+  #    - 8080:8080
+  #   networks:
+  #     - app_net
   
-  mlnet-service:
-      build:
-          context: .
-          dockerfile: ./MlNetService/Dockerfile
-      networks:
-      - app_net
+  # mlnet-service:
+  #     build:
+  #         context: .
+  #         dockerfile: ./MlNetService/Dockerfile
+  #     networks:
+  #     - app_net
   
 networks:
   app_net:

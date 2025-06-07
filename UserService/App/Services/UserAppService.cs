@@ -25,6 +25,8 @@ namespace UserService.App.Services
 
 			var user = _mapper.Map<User>(input);
 
+			user.Email = user.Email.ToLower();
+
 			await _repository.AddAsync(user);
 
 			return _mapper.Map<UserDto>(user);
@@ -59,6 +61,13 @@ namespace UserService.App.Services
 			var users = await _repository.GetAllAsync();
 
 			return _mapper.Map<IEnumerable<UserDto>>(users);
+		}
+		public async Task<UserDto> GetUserByFirebaseAsync(string firebaseId)
+		{
+			var user = await _repository.GetByFirebaseIdAsync(firebaseId);
+			if (user == null) throw new NotFoundException("User not found.");
+
+			return _mapper.Map<UserDto>(user);
 		}
 
 		public async Task<bool> UserExistsByEmailAsync(string email)
