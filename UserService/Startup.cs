@@ -48,7 +48,7 @@ public class Startup
 			options.AddFixedWindowLimiter("fixed", o =>
 			{
 				o.Window = TimeSpan.FromMinutes(1);
-				o.PermitLimit = 100; 
+				o.PermitLimit = 100;
 				o.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
 				o.QueueLimit = 0;
 			});

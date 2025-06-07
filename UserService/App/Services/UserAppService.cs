@@ -65,7 +65,7 @@ namespace UserService.App.Services
 		public async Task<UserDto> GetUserByFirebaseAsync(string firebaseId)
 		{
 			var user = await _repository.GetByFirebaseIdAsync(firebaseId);
-			if(user == null) throw new NotFoundException("User not found.");
+			if (user == null) throw new NotFoundException("User not found.");
 
 			return _mapper.Map<UserDto>(user);
 		}
