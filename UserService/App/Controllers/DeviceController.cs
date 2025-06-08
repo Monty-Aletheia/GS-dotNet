@@ -138,7 +138,6 @@ namespace UserService.App.Controllers
 
 		// DELETE api/device/{id}
 		[HttpDelete("{id:guid}")]
-		[HttpDelete("{id:guid}")]
 		public async Task<IActionResult> Delete(Guid id)
 		{
 			try

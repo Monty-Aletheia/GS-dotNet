@@ -2,7 +2,7 @@
 
 ## Descrição do Projeto
 
-O **WatchTower** é um serviço RESTful desenvolvido em .NET para gerenciamento de usuários e endereços. Ele faz parte de uma arquitetura modular, permitindo cadastro, atualização, consulta e remoção de usuários e seus respectivos endereços, com validação de dados e integração com outros serviços via mensageria.
+A WatchTower é um sistema de monitoramento de eventos extremos, que notifica, mapeia e descreve eventos extremos que acontecem ao redor do mundo em tempo real. O intuito da Watchtower é prever o risco desses acontecimentos utilizando inteligência artificial para proteger a população mundial.
 
 ---
 
