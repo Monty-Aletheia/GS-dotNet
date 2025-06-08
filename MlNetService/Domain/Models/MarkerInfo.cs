@@ -25,7 +25,9 @@ namespace MlNetService.Domain.Models
 		public string? description { get; set; } = string.Empty;
 
 		[BsonElement("AiAnalysis")]
-		public string? AiAnalysis { get; set; } = string.Empty;
+		public string? AiAnalysis { get; set; }
+
+		public string? RiskLevel { get; set; }
 
 		[BsonElement("timestamp")]
 		public string Timestamp { get; set; } = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");

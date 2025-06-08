@@ -1,6 +1,5 @@
 ﻿using MassTransit;
 using Microsoft.Extensions.Options;
-using MlNetService.App.Dtos.Messaging;
 using MlNetService.App.Services;
 using MlNetService.Domain.Interfaces;
 using MlNetService.Infra.Interfaces.WebSockets;
@@ -57,9 +56,7 @@ namespace MlNetService.Infra.Config
 						h.Password(rabbitMqSettings.Password);
 					});
 
-					cfg.ReceiveEndpoint("java-queue", ep =>
-					{
-					});
+					cfg.ReceiveEndpoint("java-queue", ep => { });
 
 					cfg.ReceiveEndpoint("mobile-queue", ep => { });
 

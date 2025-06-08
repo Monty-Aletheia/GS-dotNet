@@ -32,6 +32,7 @@ namespace MlNetService.App.Services
 
 		public void Delete(string id) => _collection.DeleteOne(m => m.Id == id);
 
+		// WebSocket
 		public async Task UpsertMarkerInfoAsync(string prediction, double lat, double lon, SensorData? sensorData)
 		{
 			var existingMarker = FindMarkerByLocation(lat, lon);
@@ -54,19 +55,29 @@ namespace MlNetService.App.Services
 			}
 		}
 
+		// Mobile Ward
 		public async Task UpsertMarkerInfoAsync(MarkerInfo markerInfo)
 		{
 			var existingMarker = FindMarkerByLocation(markerInfo.Latitude, markerInfo.Longitude);
 
-			if (existingMarker != null)
+			if (!IsNormalPrediction(markerInfo.DesasterType))
 			{
-				existingMarker.Timestamp = GetCurrentTimestamp();
-				await ReplaceMarkerAsync(existingMarker);
+				if (existingMarker != null)
+				{
+					existingMarker.Timestamp = GetCurrentTimestamp();
+					markerInfo.Id = existingMarker.Id;
+					await _collection.ReplaceOneAsync(m => m.Id == markerInfo.Id, markerInfo);
+				}
+				else
+				{
+					await _collection.InsertOneAsync(markerInfo);
+				}
 			}
-			else
+			else if (existingMarker != null)
 			{
-				await InsertMarkerAsync(markerInfo);
+				await _collection.DeleteOneAsync(m => m.Id == existingMarker.Id);
 			}
+
 		}
 
 		// Helpers

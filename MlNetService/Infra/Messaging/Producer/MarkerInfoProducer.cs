@@ -1,4 +1,5 @@
 ﻿using MassTransit;
+using MlNetService.Domain.Models;
 
 namespace MlNetService.Infra.Messaging.Producer
 {
@@ -11,7 +12,7 @@ namespace MlNetService.Infra.Messaging.Producer
 			_sendEndpointProvider = sendEndpointProvider;
 		}
 
-		public async Task SendMarkerInfoAsync(object message)
+		public async Task SendMarkerInfoAsync(MarkerInfo message)
 		{
 			var endpointJava = await _sendEndpointProvider.GetSendEndpoint(new Uri("queue:java-queue"));
 
