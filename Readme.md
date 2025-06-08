@@ -33,6 +33,7 @@ O **WatchTower** é um serviço RESTful desenvolvido em .NET para gerenciamento 
 
 ## Diagrama da Arquitetura
 
+![Diagrama da Arquitetura](https://github.com/user-attachments/assets/a0237ac9-cf5d-414e-be89-ec381932a54e)
 
 
 ---
@@ -91,7 +92,7 @@ Para facilitar o desenvolvimento e os testes do projeto ML.NET de forma isolada,
 `https://github.com/QueijoQualho/Teste-Gs-Dotnet.git`
 
 Esse repositório contém scripts que permitem executar e validar o comportamento do modelo de machine learning separadamente, garantindo maior agilidade e independência durante a fase de testes.
-
+> **Obs:** Pra testar uma das rotas do testeConsumer é necesario criar uma exchange MlNetService.App.Dtos.Messaging:GetMarkersResponse para o funcionamento do consumer
 ---
 
 ## Documentação dos Endpoints
