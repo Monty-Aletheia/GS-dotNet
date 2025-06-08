@@ -31,6 +31,10 @@ O **WatchTower** é um serviço RESTful desenvolvido em .NET para gerenciamento 
 - **Mensageria** (RabbitMQ/MassTransit) para integração e escalabilidade.
 - **Persistência** em OracleDB (relacional) e MongoDB (NoSQL).
 
+## Diagrama da Arquitetura
+
+
+
 ---
 
 ## Como Executar o Projeto
@@ -71,13 +75,22 @@ O **WatchTower** integra um módulo de Inteligência Artificial desenvolvido com
 - **Processamento:** Os dados são normalizados e enviados para o modelo de machine learning, que retorna a previsão do tipo de evento.
 - **Geolocalização:** O sistema integra serviços de geocodificação reversa para associar coordenadas geográficas a endereços reais, enriquecendo as informações enviadas ao usuário.
 
-
 ### Exemplo de Fluxo
 
 1. **Sensor envia dados** para o endpoint WebSocket.
 2. **IA processa** e prevê o tipo de desastre.
 3. **Serviço de geolocalização** converte coordenadas em endereço.
 4. **Resposta** é enviada ao cliente com previsão e localização detalhada.
+
+---
+
+## Testes Utilizados
+
+Para facilitar o desenvolvimento e os testes do projeto ML.NET de forma isolada, sem depender das demais partes do sistema, foram utilizados arquivos em JavaScript que simulam o funcionamento da aplicação. Esses arquivos estão disponíveis no seguinte repositório:
+
+`https://github.com/QueijoQualho/Teste-Gs-Dotnet.git`
+
+Esse repositório contém scripts que permitem executar e validar o comportamento do modelo de machine learning separadamente, garantindo maior agilidade e independência durante a fase de testes.
 
 ---
 
@@ -151,6 +164,5 @@ O **WatchTower** integra um módulo de Inteligência Artificial desenvolvido com
   "prediction": "Enchente",
   "lat": -23.5505,
   "log": -46.6333,
-  "endereco": "Av. Paulista, São Paulo, SP"
 }
 ```
